@@ -320,7 +320,7 @@ function uploadImage()
 	$username = $_SESSION['user']['username'];
 
 	$target_dir = "images/";
-$target_file = $target_dir . basename($username."profile_picture.PNG");
+$target_file = $target_dir . basename($username."profile_picture.png");
 $original_name = basename($_FILES['image']["name"]);
 $profile_url = basename($username."profile_picture.png");
 $uploadOk = 1;
