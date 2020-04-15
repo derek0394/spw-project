@@ -160,11 +160,11 @@ function login(){
 
 	// attempt login if no errors on form
 	
-				$query_password = "SELECT password FROM registered_users";
+				$query_password = "SELECT password FROM registered_users WHERE username = '$username'";
 					$result = mysqli_query($conn, $query_password);
 					if ($result->num_rows > 0) {
    						while($row = $result->fetch_assoc()) {
-   							$hashedPassword_fromDB[] = $row['password'];
+   							$hashedPassword_fromDB = $row['password'];
    							
    							
    						}
@@ -182,15 +182,15 @@ function login(){
 if($failed_attempts < 4){	
 	if (count($errors) == 0) {	
 			
-		for($i=0;$i<=count($hashedPassword_fromDB);$i++)
-			{
+		
 				
-				if(password_verify($password, $hashedPassword_fromDB[$i]))
+				/*if(password_verify($password, $hashedPassword_fromDB))
 				{
-					$query ="SELECT * FROM registered_users WHERE username='$username' AND password='$hashedPassword_fromDB[$i]' LIMIT 1";
+					$user = '1';
+					
+}*/
+$query ="SELECT * FROM registered_users WHERE username='$username' AND password='$hashedPassword_fromDB' LIMIT 1";
 					$results = mysqli_query($conn, $query);
-}} 
-
 				
 		if (mysqli_num_rows($results) == 1) { // user found
 
@@ -245,11 +245,11 @@ if($failed_attempts < 4){
 			}
 			
 			
-			if($failed_attempts < 5)
+		/*	if($failed_attempts < 5)
 				{
 					  sleep($failed_attempts);
 				array_push($errors, "Wrong username/password combination");
-			}
+			}*/
 			
 			
 		
@@ -267,72 +267,19 @@ if($failed_attempts < 4){
 
 if (isset($_POST['add'])) 
 {
-	uploadImage();
+	uploadProfileDetails();
 }
 
 
-function uploadImage()
+
+function uploadProfileDetails()
 {
 	global $conn, $username, $errors, $success;
 	$username = $_SESSION['user']['username'];
-
-
 	$dob  		=  e($_POST['dob']);
-	
 	//$address  	=  e($_POST['address']);
 	$city  		=  e($_POST['city']);
 	$occupation =  e($_POST['occupation']);
-
-	$target_dir = "images/";
-$target_file = $target_dir . basename($username."profile_picture.PNG");
-$original_name = basename($_FILES['name']["tmp_name"]);
-$profile_url = basename($username."profile_picture.PNG");
-$uploadOk = 1;
-$imageFileType = strtolower(pathinfo($original_name,PATHINFO_EXTENSION));
-// Check if image file is a actual image or fake image
-if(isset($_POST["add"])) {
-    $check = getimagesize($_FILES["image"]["tmp_name"]);
-    if($check !== false) {
-        //echo "File is an image - " . $check["mime"] . ".";
-        $uploadOk = 1;
-    } else {
-        //array_push($errors, "File is not an image.");
-        $uploadOk = 0;
-    }
-}
-if(basename($_FILES["image"]["name"]) != '')
-{
-// Check if file already exists
-
-// Check file size
-if ($_FILES["image"]["size"] > 500000) {
-    array_push($errors, "Sorry, your file is too large.");
-    $uploadOk = 0;
-}
-// Allow certain file formats
-/* Valid Extensions */
-$valid_extensions = array("jpg","jpeg","png");
-/* Check file extension */
-if( !in_array(strtolower($imageFileType),$valid_extensions) ) {
-	array_push($errors, "Only jpg, png, jpeg images are allowed");
-   $uploadOk = 0;
-}
-		
-// Check if $uploadOk is set to 0 by an error
-if ($uploadOk == 0) {
-    array_push($errors, "Sorry, your file is not uploaded.");
-// if everything is ok, try to upload file
-} else {
-
-	 if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
-        array_push($success, "Your profile picture was successfully updated.");
-         $query_profile_url = "UPDATE registered_users SET profile_url = '$profile_url' WHERE username = '$username'";
-      	 mysqli_query($conn, $query_profile_url);
-       }
-       else {
-        array_push($errors, "Sorry, there was an error uploading your file.");
-    }
-}}
 	if((preg_match("/([<>%\$#()@\*;-_=']+)/", $dob)) || (preg_match("/([<>%\$#()@\*;-_=']+)/", $city)) || (preg_match("/([<>%\$#()@\*;-_=']+)/", $occupation)))
 {
    array_push($errors, "Sorry, special characters are not allowed.");
@@ -352,6 +299,68 @@ else{
         mysqli_query($conn, $query_occupation);
 
     } 
+
+}
+
+if (isset($_POST['add_image'])) 
+{
+	uploadImage();
+}
+
+function uploadImage()
+{
+	global $conn, $username, $errors, $success;
+	$username = $_SESSION['user']['username'];
+
+	$target_dir = "images/";
+$target_file = $target_dir . basename($username."profile_picture.PNG");
+$original_name = basename($_FILES['image']["name"]);
+$profile_url = basename($username."profile_picture.png");
+$uploadOk = 1;
+$imageFileType = strtolower(pathinfo($original_name,PATHINFO_EXTENSION));
+// Check if image file is a actual image or fake image
+if(isset($_POST["add_image"])) {
+    $check = getimagesize($_FILES["image"]["tmp_name"]);
+    if($check !== false) {
+        //echo "File is an image - " . $check["mime"] . ".";
+        $uploadOk = 1;
+    } else {
+        //array_push($errors, "File is not an image.");
+        $uploadOk = 0;
+    }
+}
+if(basename($_FILES["image"]["name"]) != '')
+{
+
+// Check file size
+if ($_FILES["image"]["size"] > 500000) {
+    array_push($errors, "Sorry, your file is too large.");
+    $uploadOk = 0;
+}
+// Allow certain file formats
+/* Valid Extensions */
+if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+&& $imageFileType != "gif" ) {
+    array_push($errors, "Sorry, only JPG, JPEG, PNG & GIF files are allowed.");
+    $uploadOk = 0;
+}
+		
+// Check if $uploadOk is set to 0 by an error
+if ($uploadOk == 0) {
+    array_push($errors, "Sorry, your file is not uploaded.");
+// if everything is ok, try to upload file
+} else {
+
+	 if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
+        array_push($success, "Your profile picture was successfully updated.");
+         $query_profile_url = "UPDATE registered_users SET profile_url = '$profile_url' WHERE username = '$username'";
+      	 mysqli_query($conn, $query_profile_url);
+       }
+       else {
+        array_push($errors, "Sorry, there was an error uploading your file.");
+    }
+}}
+	
 }
 
 if (isset($_POST['add_comment'])) 
