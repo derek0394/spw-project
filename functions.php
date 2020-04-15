@@ -1,13 +1,19 @@
 <?php 
 session_start();
-
+error_reporting(0);
+ini_set('display_errors', 0);
 // connect to database
 include 'database_connection.php';
 
 // variable declaration
 $username = "";
 $email    = "";
+$dob  		=  "";
+$address  	=  "";
+$city  		=  "";
+$occupation =  "";
 $errors   = array(); 
+$success  = array();
 $ip_address = $_SERVER['REMOTE_ADDR'];
 
 // call the register() function if register_btn is clicked
@@ -25,10 +31,12 @@ function register(){
 
 	// receive all input values from the form. Call the e() function
     // defined below to escape form values
-	$username    =  e($_POST['username']);
+	$username    = strtolower(e($_POST['username'])); 
 	$email       =  e($_POST['email']);
 	$password_1  =  e($_POST['password_1']);
 	$password_2  =  e($_POST['password_2']);
+
+
 
 	// form validation: ensure that the form is correctly filled
 	if (empty($username)) { 
@@ -104,6 +112,17 @@ function display_error() {
 	}
 }	
 
+function display_success() {
+	global $success;
+
+	if (count($success) > 0){
+		echo '<div class="success1">';
+			foreach ($success as $success1){
+				echo $success1 .'<br>';
+			}
+		echo '</div>';
+	}
+}
 
 
 // log user out if logout button clicked
@@ -242,28 +261,129 @@ if($failed_attempts < 4){
 }
 
 			if (isset($_POST['submit'])) {
-	sql_inject();
+	//sql_inject();
 
 }
-function sql_inject()
+
+if (isset($_POST['add'])) 
 {
-	global $conn;
-$query1 = "SELECT * FROM registered_users WHERE email = $_POST[email] AND password = $_POST[password]";
-echo "<br>";
-echo "<br>";
-echo "<br>";
-echo "<br>";
-echo "<br>";
-echo "<br>";
-echo $query1;
-$result1 = mysqli_query($conn, $query1);
-		if ($result1->num_rows > 0) {
-				while($row = $result1->fetch_assoc()) {
-					$username = $row['username'];
-					$password = $row['password'];
-					echo $username;
-				}}
-}	
+	uploadImage();
+}
+
+
+function uploadImage()
+{
+	global $conn, $username, $errors, $success;
+	$username = $_SESSION['user']['username'];
+
+
+	$dob  		=  e($_POST['dob']);
+	
+	//$address  	=  e($_POST['address']);
+	$city  		=  e($_POST['city']);
+	$occupation =  e($_POST['occupation']);
+
+	$target_dir = "images/";
+$target_file = $target_dir . basename($username."profile_picture.PNG");
+$original_name = basename($_FILES['name']["tmp_name"]);
+$profile_url = basename($username."profile_picture.PNG");
+$uploadOk = 1;
+$imageFileType = strtolower(pathinfo($original_name,PATHINFO_EXTENSION));
+// Check if image file is a actual image or fake image
+if(isset($_POST["add"])) {
+    $check = getimagesize($_FILES["image"]["tmp_name"]);
+    if($check !== false) {
+        //echo "File is an image - " . $check["mime"] . ".";
+        $uploadOk = 1;
+    } else {
+        //array_push($errors, "File is not an image.");
+        $uploadOk = 0;
+    }
+}
+if(basename($_FILES["image"]["name"]) != '')
+{
+// Check if file already exists
+
+// Check file size
+if ($_FILES["image"]["size"] > 500000) {
+    array_push($errors, "Sorry, your file is too large.");
+    $uploadOk = 0;
+}
+// Allow certain file formats
+/* Valid Extensions */
+$valid_extensions = array("jpg","jpeg","png");
+/* Check file extension */
+if( !in_array(strtolower($imageFileType),$valid_extensions) ) {
+	array_push($errors, "Only jpg, png, jpeg images are allowed");
+   $uploadOk = 0;
+}
+		
+// Check if $uploadOk is set to 0 by an error
+if ($uploadOk == 0) {
+    array_push($errors, "Sorry, your file is not uploaded.");
+// if everything is ok, try to upload file
+} else {
+
+	 if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
+        array_push($success, "Your profile picture was successfully updated.");
+         $query_profile_url = "UPDATE registered_users SET profile_url = '$profile_url' WHERE username = '$username'";
+      	 mysqli_query($conn, $query_profile_url);
+       }
+       else {
+        array_push($errors, "Sorry, there was an error uploading your file.");
+    }
+}}
+	if((preg_match("/([<>%\$#()@\*;-_=']+)/", $dob)) || (preg_match("/([<>%\$#()@\*;-_=']+)/", $city)) || (preg_match("/([<>%\$#()@\*;-_=']+)/", $occupation)))
+{
+   array_push($errors, "Sorry, special characters are not allowed.");
+}
+else{
+   
+      	 $query_dob = "UPDATE registered_users SET dob = '$dob' WHERE username = '$username'";
+      	 mysqli_query($conn, $query_dob);
+      
+        //$query_address = "UPDATE registered_users SET address = '$address' WHERE username = '$username'";
+        $query_city = "UPDATE registered_users SET city = '$city' WHERE username = '$username'";
+        $query_occupation = "UPDATE registered_users SET occupation = '$occupation' WHERE username = '$username'";
+
+        
+       // mysqli_query($conn, $query_address);
+        mysqli_query($conn, $query_city);
+        mysqli_query($conn, $query_occupation);
+
+    } 
+}
+
+if (isset($_POST['add_comment'])) 
+{
+	addComment();
+}
+
+function addComment()
+{
+	global $conn, $username, $errors, $success;
+
+	$username = $_SESSION['user']['username'];
+	$error = '';
+$comment_content = $_POST["comment_content"];
+
+
+
+if(empty($_POST["comment_content"]))
+{
+array_push($errors, "Comment is required");
+}
+
+if($comment_content != '')
+{
+ $query = "INSERT INTO tbl_comment (parent_comment_id, comment, comment_sender_name) VALUES ('0', '$comment_content', 
+ '$username')";
+ mysqli_query($conn, $query);
+ 
+ array_push($success, "Comment was added");
+}
+
+}
 			
 
 function isLoggedIn()
@@ -285,3 +405,4 @@ function isAdmin()
 	}
 }
 
+?>
