@@ -7,14 +7,14 @@ include 'database_connection.php';
 $output = '';
 if(isset($_POST["query"]))
 {
- $search = mysqli_real_escape_string($connect, $_POST["query"]);
+ $search = mysqli_real_escape_string($conn, $_POST["query"]);
  $query = "
   SELECT * FROM registered_users 
   WHERE username LIKE '".$search."%'
  ";
 }
 
-$result = mysqli_query($connect, $query);
+$result = mysqli_query($conn, $query);
 if(mysqli_num_rows($result) > 0)
 {
  $output .= '
