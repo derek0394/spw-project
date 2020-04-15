@@ -165,7 +165,7 @@ $query_failed_attempts = "SELECT dob,city,occupation FROM registered_users WHERE
    	 <?php echo display_success(); ?>
 		<div class="form-group col-sm-12">
 			<div class="col-sm-3"></div>
-			<input class="col-sm-6" type="text" name="dob" placeholder="DOB" value="<?php echo $dob; ?>">
+			<input class="col-sm-6" type="text" name="dob" placeholder="DOB" value="">
 		</div>
 
 		<!--<div class="form-group col-sm-12">
@@ -175,28 +175,46 @@ $query_failed_attempts = "SELECT dob,city,occupation FROM registered_users WHERE
 		
 		<div class="form-group col-sm-12">
 			<div class="col-sm-3"></div>
-			<input class="col-sm-6" type="text" name="city" placeholder="City" value="<?php echo $city; ?>">
+			<input class="col-sm-6" type="text" name="city" placeholder="City" value="">
 		</div>
 
 		<div class="form-group col-sm-12">
 			<div class="col-sm-3"></div>
 			
-			<input class="col-sm-6" type="text" name="occupation" placeholder="Occupation" value="<?php echo $city; ?>">
+			<input class="col-sm-6" type="text" name="occupation" placeholder="Occupation" value="">
 		</div>
 	
+   
+  
+<div class="form-group">
+			<button type="submit" id = "submit" class="btn" name="add" style="margin-top: 2%"> Submit</button>
+		</div>
+	</form>
+
+	<form method="post" action="user-profile.php" enctype="multipart/form-data" style = "text-align: center; margin-top: 2%;" >
+
 		
 		<div class="form-group col-sm-12">
 			<div class="col-sm-3"></div>
 			<div class="col-sm-6">
-				<div style="float: left; font-size:222px;"><h5 style="font-size:20px;">Upload Profile Picture</h5></div> <br> <br>
-				<input  type="file" name="image" id="file" >	
+				<div style="float: left; font-size:222px;"><h5 style="font-size:20px;">Upload Profile Picture</h5>
+				</div> 
+				<input  type="file" name="image" id="image" >	
 		</div>
-	</div>
+	</div> 
+
+	<div class="form-group">
+			<button type="submit" id = "submit" class="btn" name="add_image"> Add Profile Picture</button>
+		</div>
+</form>
+	 
+ </body>
+</html>
+
+
+
 	
-		<div class="form-group">
-			<button type="submit" id = "submit" class="btn" name="add" style="margin-top: 2%"> Submit</button>
-		</div>
-	</form>
+		
 	 </div>
 	</div>
 </body>
