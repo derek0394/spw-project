@@ -4,7 +4,7 @@
 		"password": "mmlbrz7cagzqssyg",
 		"database": "itrdhg03zk2ikdkj",
 		"host": "dyud5fa2qycz1o3v.cbetxkdyhwsb.us-east-1.rds.amazonaws.com	",
-		"dialect": "",
+		"dialect": ""
 
 	},
 	"test": {
@@ -12,7 +12,7 @@
 		"password": "mmlbrz7cagzqssyg",
 		"database": "itrdhg03zk2ikdkj",
 		"host": "dyud5fa2qycz1o3v.cbetxkdyhwsb.us-east-1.rds.amazonaws.com	",
-		"dialect": "",
+		"dialect": ""
 
 	},
 	"production": {
@@ -20,7 +20,7 @@
 		"password": "mmlbrz7cagzqssyg",
 		"database": "itrdhg03zk2ikdkj",
 		"host": "dyud5fa2qycz1o3v.cbetxkdyhwsb.us-east-1.rds.amazonaws.com	",
-		"dialect": "",
+		"dialect": ""
 
 	}
 	
