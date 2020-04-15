@@ -285,13 +285,20 @@ function uploadProfileDetails()
    array_push($errors, "Sorry, special characters are not allowed.");
 }
 else{
-   
+   if($dob != '')
+   {
       	 $query_dob = "UPDATE registered_users SET dob = '$dob' WHERE username = '$username'";
       	 mysqli_query($conn, $query_dob);
-      
+      }
         //$query_address = "UPDATE registered_users SET address = '$address' WHERE username = '$username'";
+      if($city != '')
+   {
         $query_city = "UPDATE registered_users SET city = '$city' WHERE username = '$username'";
+    }
+        if($occupation != '')
+   {
         $query_occupation = "UPDATE registered_users SET occupation = '$occupation' WHERE username = '$username'";
+    }
 
         
        // mysqli_query($conn, $query_address);
