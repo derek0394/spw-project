@@ -2,7 +2,7 @@
 //ini_set("memory_limit", "32M");
 //fetch_comment.php
 
-$connect = new PDO('mysql:host=localhost;dbname=application', 'root', '');
+$connect = new PDO('mysql:host=dyud5fa2qycz1o3v.cbetxkdyhwsb.us-east-1.rds.amazonaws.com;dbname=itrdhg03zk2ikdkj', 'ulo9xf8ad5xednpc','mmlbrz7cagzqssyg');
 
 $query = "
 SELECT * FROM tbl_comment 
