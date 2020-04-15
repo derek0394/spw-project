@@ -2,8 +2,8 @@
 <?php
 error_reporting(0);
 ini_set('display_errors', 0);
+include 'database_connection.php';
 
-$connect = mysqli_connect("localhost", "root", "", "application");
 $output = '';
 if(isset($_POST["query"]))
 {
