@@ -403,7 +403,7 @@ if (isset($_POST['delete-user-btn'])) {
 function deleteUser(){
 global $conn, $username, $errors, $success, $password;
 	$username = $_SESSION['user']['username'];
-	$user_to_delete = $_POST['user_to_delete'];
+	$user_to_delete = strtolower(e($_POST['user_to_delete']));
 	$password = $_POST['password'];
 	$query_password = "SELECT password FROM registered_users WHERE username = '$username'";
 					$result = mysqli_query($conn, $query_password);
@@ -457,7 +457,7 @@ function addComment()
 
 	if($comment_content != '')
 		{
-			if(preg_match("/^[a-zA-Z0-9,]+$/", $comment_content))
+			if(preg_match("/^[a-zA-Z0-9 ,]+$/", $comment_content))
 				{
 	
 					$query = "INSERT INTO tbl_comment (parent_comment_id, comment, comment_sender_name, ip_address) VALUES ('0', '$comment_content', '$username', '$ip_address')";
