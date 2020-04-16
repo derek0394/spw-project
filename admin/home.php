@@ -21,7 +21,7 @@ if (isset($_GET['logout'])) {
 	<link rel="stylesheet" type="text/css" href="../style.css">
 	<style>
 	.header {
-		background: #003366;
+		background: #d08722;
 	}
 	button[name=register_btn] {
 		background: #003366;
@@ -58,6 +58,7 @@ if (isset($_GET['logout'])) {
 						<br>
 						<a href="home.php?logout='1'" style="color: red;">logout</a>
                        &nbsp; <a href="create_user.php"> + add user</a>
+                       &nbsp; <a href="delete-user.php"> x remove user</a>
 					</small>
 
 				<?php endif ?>
