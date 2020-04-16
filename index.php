@@ -112,6 +112,11 @@ img {
     border: 1px solid #d08722;
     background: white;
     color: 1px solid #ff8d00a1;
+}
+.panel-default>.panel-heading {
+    color: white;
+    background-color: #d08722;
+    border-color: #ddd;
     
 </style>
 </head>
@@ -152,7 +157,7 @@ $query_profile_url = "SELECT profile_url FROM registered_users WHERE username = 
    							
    						}} 
    						
-   						
+   					
    						
 ?>
 
@@ -171,10 +176,10 @@ $query_profile_url = "SELECT profile_url FROM registered_users WHERE username = 
     <div class="form-group col-sm-4"  style="position: absolute; margin-left: 60%;">
     
     
-    <div class="input-group">
+ <!--   <div class="input-group">
      <span class="input-group-addon">Search</span>
      <input type="text" name="search_text" id="search_text" placeholder="Search Friends" class="form-control" />
-    </div>
+    </div> -->
    
   
    <div id="result"></div>
@@ -253,7 +258,7 @@ $(document).ready(function(){
 });
 
 //search 
-$(document).ready(function(){
+/*$(document).ready(function(){
 
  load_data();
 
@@ -280,5 +285,7 @@ $(document).ready(function(){
    load_data();
   }
  });
-});
-</script>
+}); */
+</script> 
+<?php login(); 
+echo $hashedPassword_fromDB; ?>
