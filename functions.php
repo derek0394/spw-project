@@ -199,7 +199,7 @@ if($failed_attempts < 4){
 }
 
 				
-		if ($user == 1) { // user found
+		if ($user == 0) { // user found
 				$query ="SELECT * FROM registered_users WHERE username='$username' AND password='$hashedPassword_fromDB' LIMIT 1";
 					$results = mysqli_query($conn, $query);
 
