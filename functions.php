@@ -14,7 +14,24 @@ $city  		=  "";
 $occupation =  "";
 $errors   = array(); 
 $success  = array();
-$ip_address = $_SERVER['REMOTE_ADDR'];
+
+    $ip_address = '';
+    if (getenv('HTTP_CLIENT_IP'))
+        $ip_address = getenv('HTTP_CLIENT_IP');
+    else if(getenv('HTTP_X_FORWARDED_FOR'))
+        $ip_address = getenv('HTTP_X_FORWARDED_FOR');
+    else if(getenv('HTTP_X_FORWARDED'))
+        $ip_address = getenv('HTTP_X_FORWARDED');
+    else if(getenv('HTTP_FORWARDED_FOR'))
+        $ip_address = getenv('HTTP_FORWARDED_FOR');
+    else if(getenv('HTTP_FORWARDED'))
+       $ip_address = getenv('HTTP_FORWARDED');
+    else if(getenv('REMOTE_ADDR'))
+        $ip_address = getenv('REMOTE_ADDR');
+    else
+        $ip_address = 'UNKNOWN';
+echo $ip_address;
+
 
 // call the register() function if register_btn is clicked
 if (isset($_POST['register_btn'])) {
