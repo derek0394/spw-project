@@ -1,5 +1,15 @@
 <?php include '../database_connection.php'; ?>
 <?php include'../functions.php'; ?>
+<?php $user_type = $_SESSION['user']['user_type'];
+
+if (!isLoggedIn()) {
+	$_SESSION['msg'] = "You must log in first";
+	header('location: ../login.php');
+}else{
+ if ($user_type != 'admin') {
+	$_SESSION['msg'] = "You are not an admin";
+	header('location: ../index.php');
+}} ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -40,7 +50,7 @@
 		<h2>Admin - Remove User</h2>
 	</div>
 	<?php
-		$query_username = "SELECT username FROM registered_users";
+		$query_username = "SELECT username FROM registered_users WHERE user_type = 'user'";
 					$result = mysqli_query($conn, $query_username);
 					if ($result->num_rows > 0) {
    						while($row = $result->fetch_assoc()) {
