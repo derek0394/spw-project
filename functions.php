@@ -188,7 +188,7 @@ if($failed_attempts < 4){
 			
 		
 				
-				if(password_verify('derek123', $hashedPassword_fromDB))
+				if(password_verify('rahul123', $hashedPassword_fromDB))
 				{
 					$user=1;
 					echo $user;
