@@ -286,11 +286,9 @@ function uploadProfileDetails()
 	//$address  	=  e($_POST['address']);
 	$city  		=  e($_POST['city']);
 	$occupation =  e($_POST['occupation']);
-	if((preg_match("/([<>%\$#()@\*;-_=']+)/", $dob)) || (preg_match("/([<>%\$#()@\*;-_=']+)/", $city)) || (preg_match("/([<>%\$#()@\*;-_=']+)/", $occupation)))
+
+	if((preg_match("/^[a-zA-Z0-9,]+$/", $dob)) || (preg_match("/^[a-zA-Z,]+$/", $city)) || (preg_match("/^[a-zA-Z,]+$/", $occupation)))
 {
-   array_push($errors, "Sorry, special characters are not allowed.");
-}
-else{
    if($dob !='')
    {
       	 $query_dob = "UPDATE registered_users SET dob = '$dob' WHERE username = '$username'";
@@ -313,7 +311,10 @@ else{
        
        
 
-    } 
+    }else{
+    	   array_push($errors, "Sorry, special characters are not allowed.");
+}
+ 
 
 }
 
