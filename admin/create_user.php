@@ -10,8 +10,11 @@
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<style>
+		input{
+			border-color: grey !important;
+		}
 		.header {
-			background: #d25309;
+			background: #d49328;
 			height:50px;
 			text-align: center;
 			vertical-align: center;
@@ -19,7 +22,7 @@
 
 		}
 		button[name=register_btn] {
-			background: #d25309;
+			background: #d49328;
 		}
 		input, select{
 			text-align: center;
@@ -34,7 +37,7 @@
 <body>
 	<div class="container">
 	<div class="header">
-		<h2>Admin - create user</h2>
+		<h2>Admin - Create User</h2>
 	</div>
 	
 	<form class="" method="post" action="create_user.php" style = "text-align: center; margin-top: 10%;">
