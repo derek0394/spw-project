@@ -146,7 +146,7 @@ function login(){
 
 	// grap form values
 	$username = e($_POST['username']);
-	$password = e($_POST['password']);
+	$password = $_POST['password'];
 
 
 
@@ -188,7 +188,7 @@ if($failed_attempts < 4){
 			
 		
 				
-				if(password_verify('rahul123', $hashedPassword_fromDB))
+				if(password_verify($password, $hashedPassword_fromDB))
 				{
 					$user=1;
 					echo $user;
