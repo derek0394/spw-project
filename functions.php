@@ -160,11 +160,11 @@ function login(){
 
 	// attempt login if no errors on form
 	
-				$query_password = "SELECT password FROM registered_users";
+				$query_password = "SELECT password FROM registered_users WHERE username='$username'";
 					$result = mysqli_query($conn, $query_password);
 					if ($result->num_rows > 0) {
    						while($row = $result->fetch_assoc()) {
-   							$hashedPassword_fromDB[] = $row['password'];
+   							$hashedPassword_fromDB = $row['password'];
    							
    							
    						}
@@ -178,21 +178,26 @@ function login(){
    							$failed_attempts = $row['failed_attempts'];
    							
    						}}
-   							
+   						
 if($failed_attempts < 4){	
 	if (count($errors) == 0) {	
 			
-		for($i=0;$i<=count($hashedPassword_fromDB);$i++)
-			{
+		
 				
-				if(password_verify($password, $hashedPassword_fromDB[$i]))
+				if(password_verify($password, $hashedPassword_fromDB))
 				{
-					$query ="SELECT * FROM registered_users WHERE username='$username' AND password='$hashedPassword_fromDB[$i]' LIMIT 1";
-					$results = mysqli_query($conn, $query);
-}} 
+					$user=1;
+					
+				
+} else{
+	$user=0;
+	
+}
 
 				
-		if (mysqli_num_rows($results) == 1) { // user found
+		if ($user == 1) { // user found
+				$query ="SELECT * FROM registered_users WHERE username='$username' AND password='$hashedPassword_fromDB' LIMIT 1";
+					$results = mysqli_query($conn, $query);
 
 			$query1 = "UPDATE registered_users SET failed_attempts = 0 WHERE username = '$username'";
 				echo $query1;
