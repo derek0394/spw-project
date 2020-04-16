@@ -30,7 +30,7 @@ $success  = array();
         $ip_address = getenv('REMOTE_ADDR');
     else
         $ip_address = 'UNKNOWN';
-echo $ip_address;
+
 
 
 // call the register() function if register_btn is clicked
