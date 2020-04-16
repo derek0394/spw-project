@@ -31,12 +31,12 @@ if (isLoggedIn()) {
      
       <input type="submit" class="fadeIn fourth" name="login_btn">
    
-    <p>
-      Not yet a member? <a href="register.php">Sign up</a>
-    </p>
+    
     </form>
-     
-      <a class="underlineHover" href="register.php">Register</a>
+     <p>
+      Not yet a member? 
+    </p>
+      <a class="underlineHover" href="register.php">Sign up</a>
   
     <!-- Remind Passowrd -->
     <div id="formFooter">
