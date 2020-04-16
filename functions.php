@@ -145,8 +145,8 @@ function login(){
  	$date_time = date("Y-m-d h:i:sa");
 
 	// grap form values
-	$username = e($_POST['username']);
-	$password = $_POST['password'];
+	$username = strtolower(e($_POST['username'])); 
+	$password = e($_POST['password']);
 
 
 
@@ -178,10 +178,7 @@ function login(){
    							$failed_attempts = $row['failed_attempts'];
    							
    						}}
-   						echo $query_password;
-   						echo $query_failed_attempts;
-   						echo $hashedPassword_fromDB;
-   						echo $password;
+   					
    							
 if($failed_attempts < 4){	
 	if (count($errors) == 0) {	
@@ -191,11 +188,11 @@ if($failed_attempts < 4){
 				if(password_verify($password, $hashedPassword_fromDB))
 				{
 					$user=1;
-					echo $user;
+					
 				
 } else{
 	$user=0;
-	echo $user;
+	
 }
 
 				
