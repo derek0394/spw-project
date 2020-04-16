@@ -1,5 +1,16 @@
 <?php include '../database_connection.php'; ?>
 <?php include'../functions.php'; ?>
+<?php $user_type = $_SESSION['user']['user_type'];
+
+
+if (!isLoggedIn()) {
+	$_SESSION['msg'] = "You must log in first";
+	header('location: ../login.php');
+}else{
+ if ($user_type != 'admin') {
+	$_SESSION['msg'] = "You are not an admin";
+	header('location: ../index.php');
+}} ?>
 <!DOCTYPE html>
 <html>
 <head>
