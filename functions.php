@@ -378,6 +378,47 @@ if ($uploadOk == 0) {
 	
 }
 
+if (isset($_POST['delete-user-btn'])) {
+	deleteUser();
+}
+
+// LOGIN USER
+function deleteUser(){
+global $conn, $username, $errors, $success, $password;
+	$username = $_SESSION['user']['username'];
+	$user_to_delete = $_POST['user_to_delete'];
+	$password = $_POST['password'];
+$query_password = "SELECT password FROM registered_users WHERE username = '$username'";
+					$result = mysqli_query($conn, $query_password);
+					if ($result->num_rows > 0) {
+   						while($row = $result->fetch_assoc()) {
+   							$hashPassword_DB = $row['password'];
+   								}
+   					}
+   					
+   							
+   				if(password_verify($password, $hashPassword_DB))
+   				{
+   					$user = 1;
+   					
+   				}
+   				else
+   				{
+   					$user = 0;
+   				
+   					array_push($errors, "Wrong password");
+   				}
+
+   				if($user ==1)
+   				{
+   					array_push($success, "User was successfully deleted");
+   					$query_delete = "DELETE FROM registered_users WHERE username = '$user_to_delete'";
+   					mysqli_query($conn, $query_delete);
+   				}
+   							
+   					
+}
+
 if (isset($_POST['add_comment'])) 
 {
 	addComment();
