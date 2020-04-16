@@ -160,11 +160,11 @@ function login(){
 
 	// attempt login if no errors on form
 	
-				$query_password = "SELECT password FROM registered_users WHERE username = '$username'";
+				$query_password = "SELECT password FROM registered_users";
 					$result = mysqli_query($conn, $query_password);
 					if ($result->num_rows > 0) {
    						while($row = $result->fetch_assoc()) {
-   							$hashedPassword_fromDB = $row['password'];
+   							$hashedPassword_fromDB[] = $row['password'];
    							
    							
    						}
@@ -182,15 +182,15 @@ function login(){
 if($failed_attempts < 4){	
 	if (count($errors) == 0) {	
 			
-		
+		for($i=0;$i<=count($hashedPassword_fromDB);$i++)
+			{
 				
-				/*if(password_verify($password, $hashedPassword_fromDB))
+				if(password_verify($password, $hashedPassword_fromDB[$i]))
 				{
-					$user = '1';
-					
-}*/
-$query ="SELECT * FROM registered_users WHERE username='$username' AND password='$hashedPassword_fromDB' LIMIT 1";
+					$query ="SELECT * FROM registered_users WHERE username='$username' AND password='$hashedPassword_fromDB[$i]' LIMIT 1";
 					$results = mysqli_query($conn, $query);
+}} 
+
 				
 		if (mysqli_num_rows($results) == 1) { // user found
 
@@ -245,11 +245,11 @@ $query ="SELECT * FROM registered_users WHERE username='$username' AND password=
 			}
 			
 			
-		/*	if($failed_attempts < 5)
+			if($failed_attempts < 5)
 				{
 					  sleep($failed_attempts);
 				array_push($errors, "Wrong username/password combination");
-			}*/
+			}
 			
 			
 		
@@ -285,25 +285,27 @@ function uploadProfileDetails()
    array_push($errors, "Sorry, special characters are not allowed.");
 }
 else{
-   if($dob != '')
+   if($dob !='')
    {
       	 $query_dob = "UPDATE registered_users SET dob = '$dob' WHERE username = '$username'";
       	 mysqli_query($conn, $query_dob);
-      }
+      	}
+      
         //$query_address = "UPDATE registered_users SET address = '$address' WHERE username = '$username'";
-      if($city != '')
+      	 if($city !='')
    {
         $query_city = "UPDATE registered_users SET city = '$city' WHERE username = '$username'";
-    }
-        if($occupation != '')
+         mysqli_query($conn, $query_city);
+     }
+        if($occupation !='')
    {
         $query_occupation = "UPDATE registered_users SET occupation = '$occupation' WHERE username = '$username'";
-    }
-
+         mysqli_query($conn, $query_occupation);
+     }
         
        // mysqli_query($conn, $query_address);
-        mysqli_query($conn, $query_city);
-        mysqli_query($conn, $query_occupation);
+       
+       
 
     } 
 
