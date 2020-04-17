@@ -15,7 +15,28 @@ if (isLoggedIn()) {
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <!------ Include the above in your HEAD tag ---------->
-
+<style type="text/css">
+  input[type=password] {
+    background-color: #f6f6f6;
+    border: none;
+    color: #0d0d0d;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 2px;
+    width: 85%;
+    border: 2px solid #f6f6f6;
+    -webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -ms-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+    -webkit-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
+}
+</style>
 <div class="wrapper fadeInDown">
   <div id="formContent">
     <!-- Tabs Titles -->
@@ -28,11 +49,14 @@ if (isLoggedIn()) {
     <!-- Login Form -->
     <form method = "post", action="register.php" style = "margin-top: 5%;">
       <?php echo display_error(); ?>
+
       <input type="text" id="login" class="fadeIn second" name="username" placeholder="Username" value="<?php echo $username; ?>">
       <input type="text" id="email" class="fadeIn third" name="email" placeholder="Email" value="<?php echo $email; ?>">
 
       <!--<input type="text" id="number" class="fadeIn third" name="number" placeholder="Number">-->
       <input type="password" id="password" class="fadeIn third" name="password_1" placeholder="Password">
+      
+      <progress value="0" max="100" id = "strength" style="width: 230px;"></progress>
       <input type="password" id="password" class="fadeIn third" name="password_2" placeholder="Re-type password">
       
     <input type="submit" class="fadeIn fourth" name="register_btn">
@@ -51,4 +75,54 @@ if (isLoggedIn()) {
 
   </div>
 </div>
-<?php echo $date_time; ?>
+<script>
+
+var pass = document.getElementById("password")
+pass.addEventListener('keyup', function(){
+  checkPassword(pass.value)
+})
+
+function checkPassword(password)
+{
+  var strengthBar = document.getElementById("strength")
+  var strength =0;
+  if (password.match(/[a-zA-Z0-9][a-zA-Z0-9]+/))
+  {
+    strength += 1
+  }
+
+  if (password.match(/[~<>?]+/))
+  {
+    strength += 1
+  }
+
+  if (password.match(/[!@$#&%*()]+/))
+  {
+    strength += 1
+  }
+    if (password.length > 8)
+  {
+    strength += 1
+  }
+
+  switch(strength)
+  {
+    case 0:
+        strengthBar.value = 20;
+        break
+    case 1:
+        strengthBar.value = 40;
+        break
+    case 2:
+        strengthBar.value = 60;
+        break
+    case 4:
+        strengthBar.value = 80;
+        break
+    case 5:
+        strengthBar.value = 100;
+        break
+
+  }
+}
+</script>
