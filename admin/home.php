@@ -88,7 +88,7 @@ if (isset($_GET['logout'])) {
 							{
 								$date_time_from_DB[] = $row['date_time'];
 								$username_from_DB[] = $row['username'];
-								$ip_address_from_DB[] = $row['date_time'];			
+								$ip_address_from_DB[] = $row['ip_address'];			
 							}
 						}
 
@@ -128,7 +128,7 @@ if (isset($_GET['logout'])) {
 							{
 								$date_time_from_DB[] = $row['date_time'];
 								$username_from_DB[] = $row['username'];
-								$ip_address_from_DB[] = $row['date_time'];			
+								$ip_address_from_DB[] = $row['ip_address'];			
 							}
 						}
 
