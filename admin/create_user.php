@@ -2,7 +2,10 @@
 <?php include'../functions.php'; ?>
 <?php $user_type = $_SESSION['user']['user_type'];
 
-
+if (!isAdmin()) {
+	$_SESSION['msg'] = "You must log in first";
+	header('location: ../login.php');
+}
 if (!isLoggedIn()) {
 	$_SESSION['msg'] = "You must log in first";
 	header('location: ../login.php');
