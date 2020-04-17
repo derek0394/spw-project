@@ -550,12 +550,14 @@ function isAdmin()
 	if (isset($_SESSION['user']) && $_SESSION['user']['user_type'] == 'admin' ) {
 		return true;
 	}else{
-		
+		if($username != ' ')
+		{
+			
 		$query_insert = "INSERT INTO tried_to_access_admin_page (username, date_time, ip_address) 
 					  VALUES('$username', '$date_time', '$ip_address')";
 					  
 			mysqli_query($conn, $query_insert);
-		
+		}
 		return false;
 	}
 }
