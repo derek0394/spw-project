@@ -19,6 +19,16 @@ $username = $_SESSION['user']['username'];
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript" src = "script.js"></script>
+
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<!-- Isolated Version of Bootstrap, not needed if your site already uses Bootstrap -->
+<link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" />
+
+<!-- Bootstrap Date-Picker Plugin -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
 <style>
 	<style>
 
@@ -102,7 +112,7 @@ h4{
    <div class="topmenu">
           <ul class="nav navbar-nav navbar">
           	 <li><a class="navbar-brand" href="index.php"><h4>FZone</h4></a></li>
-            <li><a href="Web1/appointment"><h4>Transactions</h4></a></li>
+            
             
             <li><a class = "current" href="user-profile.php"><h4>Profile</h4></a></li>
           </ul>
@@ -169,8 +179,11 @@ $query_failed_attempts = "SELECT dob,city,occupation FROM registered_users WHERE
    	 <?php echo display_success(); ?>
 		<div class="form-group col-sm-12">
 			<div class="col-sm-3"></div>
-			<input class="col-sm-6" type="text" name="dob" placeholder="DOB" value="">
-		</div>
+			<input class="col-sm-6" type="text" id="date" name="dob" placeholder="DOB" value="">
+       
+      </div>
+		
+
 
 		<!--<div class="form-group col-sm-12">
 			<div class="col-sm-3"></div>
@@ -223,3 +236,19 @@ $query_failed_attempts = "SELECT dob,city,occupation FROM registered_users WHERE
 	</div>
 </body>
 </html>
+
+
+
+<script>
+    $(document).ready(function(){
+      var date_input=$('input[name="dob"]'); //our date input has the name "date"
+      var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+      var options={
+        format: 'dd-mm-yyyy',
+        container: container,
+        todayHighlight: true,
+        autoclose: true,
+      };
+      date_input.datepicker(options);
+    })
+</script>
