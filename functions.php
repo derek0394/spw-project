@@ -51,6 +51,10 @@ function register()
 	$password_1  =  e($_POST['password_1']);
 	$password_2  =  e($_POST['password_2']);
 
+	if(!preg_match("/^[a-zA-Z0-9]+$/", $username))
+	{
+		array_push($errors, "Only alphabets and numbers are allowed in username"); 
+	}
 	// form validation: ensure that the form is correctly filled
 	if (empty($username)) { 
 		array_push($errors, "Username is required"); 
@@ -62,8 +66,12 @@ function register()
 		array_push($errors, "Password is required"); 
 	}
 	if ($password_1 != $password_2) {
-		array_push($errors, "The two passwords do not match");
+		
 	}
+	if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    	array_push($errors, "Invalid Email ID");
+	}
+
 	date_default_timezone_set("Europe/Dublin");
  	$date_time = date("Y-m-d h:i:sa");
 	// register user if there are no errors in the form
@@ -146,9 +154,30 @@ function display_success() {
 // log user out if logout button clicked
 if (isset($_GET['logout'])) 
 {
+	global $conn, $username;
+	$username = $_SESSION['user']['username'];
+	date_default_timezone_set("Europe/Dublin");
+ 	$date_time = date("Y-m-d h:i:sa");
+
+
+	$query_password = "SELECT date_time FROM registered_users WHERE username='$username'";
+		$result = mysqli_query($conn, $query_password);
+		if ($result->num_rows > 0) 
+		{
+			while($row = $result->fetch_assoc()) 
+			{
+				$date_time_from_DB = $row['date_time'];			
+			}
+		}
+
+	$query_logout_time = "UPDATE user_logs SET logout_time = '$date_time' WHERE username = '$username' AND logout_time =' '";
+				//echo $query_logout_time;
+				mysqli_query($conn, $query_logout_time);
+
 	session_destroy();
 	unset($_SESSION['user']);
 	header("location: login.php");
+
 }
 
 // call the login() function if register_btn is clicked
@@ -163,6 +192,7 @@ function login(){
 	global $conn, $username, $errors, $ip_address;
 	date_default_timezone_set("Europe/Dublin");
  	$date_time = date("Y-m-d h:i:sa");
+
 	// grap form values
 	$username = strtolower(e($_POST['username'])); 
 	$password = e($_POST['password']);
@@ -174,7 +204,10 @@ function login(){
 	if (empty($password)) {
 		array_push($errors, "Password is required");
 	}
-
+	if(!preg_match("/^[a-zA-Z0-9]+$/", $username))
+	{
+		array_push($errors, "Wrong username/password combination");
+	}
 	
 	$query_password = "SELECT password FROM registered_users WHERE username='$username'";
 		$result = mysqli_query($conn, $query_password);
@@ -197,7 +230,7 @@ function login(){
 					
 				}
 		}
-   					
+   				
    							
 if($failed_attempts < 4){	
 	if (count($errors) == 0) 
@@ -299,10 +332,10 @@ function uploadProfileDetails()
 	$username = $_SESSION['user']['username'];
 	$dob  		=  e($_POST['dob']);
 	//$address  	=  e($_POST['address']);
-	$city  		=  e($_POST['city']);
-	$occupation =  e($_POST['occupation']);
+	$city  		=  strtoupper(e($_POST['city']));
+	$occupation =  strtoupper(e($_POST['occupation']));
 
-	if((preg_match("/^[a-zA-Z0-9,]+$/", $dob)) || (preg_match("/^[a-zA-Z,]+$/", $city)) || (preg_match("/^[a-zA-Z,]+$/", $occupation)))
+	if((preg_match("/^[0-9-]+$/", $dob)) || (preg_match("/^[a-zA-Z ]+$/", $city)) || (preg_match("/^[a-zA-Z ]+$/", $occupation)))
 	{
    		if($dob !='')
    		{
@@ -345,9 +378,9 @@ function uploadImage()
 	$username = $_SESSION['user']['username'];
 
 	$target_dir = "images/";
-	$target_file = $target_dir . basename($username."profile_picture.png");
+	$target_file = $target_dir . basename($username."_profile_picture.png");
 	$original_name = basename($_FILES['image']["name"]);
-	$profile_url = basename($username."profile_picture.png");
+	$profile_url = basename($username."_profile_picture.png");
 	$uploadOk = 1;
 	$imageFileType = strtolower(pathinfo($original_name,PATHINFO_EXTENSION));
 	// Check if image file is a actual image or fake image
@@ -447,8 +480,33 @@ function addComment()
 	$username = $_SESSION['user']['username'];
 	$error = '';
 	$comment_content = e($_POST["comment_content"]);
+	date_default_timezone_set("Europe/Dublin");
+	$date_time = date("Y-m-d h:i:sa");
+		
+	$query_time = "SELECT date FROM tbl_comment";
+		$result = mysqli_query($conn, $query_time);
+		if ($result->num_rows > 0) 
+		{
+			while($row = $result->fetch_assoc()) 
+			{
+				$date_time_from_DB[] = $row['date'];			
+			}
+		}
+		/*print_r($date_time_from_DB);
+		//echo sizeof($date_time_from_DB);
+		for($i=0; $i< sizeof($date_time_from_DB); $i++)
+		{
 
+		$start_date[$i] = new DateTime($date_time_from_DB[$i]);
+		$since_start[$i] = $start_date[$i]->diff(new DateTime($date_time));
 
+		$mins[$i] =  $since_start[$i]->i."<br>";
+		print_r($mins[$i]);
+	}*/
+
+		
+	
+	
 
 	if(empty($_POST["comment_content"]))
 		{
@@ -457,7 +515,7 @@ function addComment()
 
 	if($comment_content != '')
 		{
-			if(preg_match("/^[a-zA-Z0-9 ,]+$/", $comment_content))
+			if(preg_match("/^[a-zA-Z0-9 ]+$/", $comment_content))
 				{
 	
 					$query = "INSERT INTO tbl_comment (parent_comment_id, comment, comment_sender_name, ip_address) VALUES ('0', '$comment_content', '$username', '$ip_address')";
@@ -485,9 +543,17 @@ function isLoggedIn()
 
 function isAdmin()
 {
+	global $conn, $username, $ip_address;
+	date_default_timezone_set("Europe/Dublin");
+	$date_time = date("Y-m-d h:i:sa");
+	$username = $_SESSION['user']['username'];
 	if (isset($_SESSION['user']) && $_SESSION['user']['user_type'] == 'admin' ) {
 		return true;
 	}else{
+		$query_insert = "INSERT INTO tried_to_access_admin_page (username, date_time, ip_address) 
+					  VALUES('$username', '$date_time', '$ip_address')";
+					  
+			mysqli_query($conn, $query_insert);
 		return false;
 	}
 }
