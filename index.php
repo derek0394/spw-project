@@ -129,7 +129,7 @@ img {
    <div class="topmenu">
           <ul class="nav navbar-nav navbar">
           	 <li><a  href="index.php"><h4>FZone</h4></a></li>
-            <li><a href="Web1/appointment"><h4>Transactions</h4></a></li>
+            
             
             <li><a  href="user-profile.php"><h4>Profile</h4></a></li>
           </ul>
@@ -189,7 +189,7 @@ $query_profile_url = "SELECT profile_url FROM registered_users WHERE username = 
    
      <form method="POST" id="comment_form">
     <div class="form-group">
-     <textarea name="comment_content" id="comment_content" class="form-control" placeholder="World chat (max 50 words)" rows="5"></textarea>
+     <textarea name="comment_content" id="comment_content" class="form-control" value = '' placeholder="World chat (max 50 words)" rows="5"></textarea>
     </div>
    
     <div class="form-group">
@@ -287,5 +287,5 @@ $(document).ready(function(){
  });
 }); */
 </script> 
-<?php login(); 
-echo $hashedPassword_fromDB; ?>
+<?php addComment(); 
+echo $mins; ?>
