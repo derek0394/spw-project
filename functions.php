@@ -30,7 +30,79 @@ $success  = array();
         $ip_address = getenv('REMOTE_ADDR');
     else
         $ip_address = 'UNKNOWN';
+$user_agent = $_SERVER['HTTP_USER_AGENT'];
 
+function getOS() { 
+
+    global $user_agent, $user_os;
+    $os_platform  = "Unknown OS Platform";
+
+    $os_array     = array(
+                          '/windows nt 10/i'      =>  'Windows 10',
+                          '/windows nt 6.3/i'     =>  'Windows 8.1',
+                          '/windows nt 6.2/i'     =>  'Windows 8',
+                          '/windows nt 6.1/i'     =>  'Windows 7',
+                          '/windows nt 6.0/i'     =>  'Windows Vista',
+                          '/windows nt 5.2/i'     =>  'Windows Server 2003/XP x64',
+                          '/windows nt 5.1/i'     =>  'Windows XP',
+                          '/windows xp/i'         =>  'Windows XP',
+                          '/windows nt 5.0/i'     =>  'Windows 2000',
+                          '/windows me/i'         =>  'Windows ME',
+                          '/win98/i'              =>  'Windows 98',
+                          '/win95/i'              =>  'Windows 95',
+                          '/win16/i'              =>  'Windows 3.11',
+                          '/macintosh|mac os x/i' =>  'Mac OS X',
+                          '/mac_powerpc/i'        =>  'Mac OS 9',
+                          '/linux/i'              =>  'Linux',
+                          '/ubuntu/i'             =>  'Ubuntu',
+                          '/iphone/i'             =>  'iPhone',
+                          '/ipod/i'               =>  'iPod',
+                          '/ipad/i'               =>  'iPad',
+                          '/android/i'            =>  'Android',
+                          '/blackberry/i'         =>  'BlackBerry',
+                          '/webos/i'              =>  'Mobile'
+                    );
+
+    foreach ($os_array as $regex => $value)
+        if (preg_match($regex, $user_agent))
+            $os_platform = $value;
+
+    return $os_platform;
+}
+
+function getBrowser() {
+
+    global $user_agent, $user_browser;
+
+    $browser        = "Unknown Browser";
+
+    $browser_array = array(
+                            '/msie/i'      => 'Internet Explorer',
+                            '/firefox/i'   => 'Firefox',
+                            '/safari/i'    => 'Safari',
+                            '/chrome/i'    => 'Chrome',
+                            '/edge/i'      => 'Edge',
+                            '/opera/i'     => 'Opera',
+                            '/netscape/i'  => 'Netscape',
+                            '/maxthon/i'   => 'Maxthon',
+                            '/konqueror/i' => 'Konqueror',
+                            '/mobile/i'    => 'Handheld Browser'
+                     );
+
+    foreach ($browser_array as $regex => $value)
+        if (preg_match($regex, $user_agent))
+            $browser = $value;
+
+    return $browser;
+}
+
+
+$user_os        = getOS();
+$user_browser   = getBrowser();
+
+//$device_details = "<strong>Browser: </strong>".$user_browser."<br /><strong>Operating System: </strong>".$user_os."";
+
+//print_r($device_details);
 
 
 // call the register() function if register_btn is clicked
@@ -45,12 +117,13 @@ function register()
 {
 
 	// call these variables with the global keyword to make them available in function
-	global $conn, $errors, $username, $email, $ip_address;
+	global $conn, $errors, $username, $email, $ip_address, $user_os, $user_browser;
 	$username    = strtolower(e($_POST['username'])); 
 	$email       =  e($_POST['email']);
 	$password_1  =  e($_POST['password_1']);
 	$password_2  =  e($_POST['password_2']);
 
+	echo $user_browser;
 	if(!preg_match("/^[a-zA-Z0-9]+$/", $username))
 	{
 		array_push($errors, "Only alphabets and numbers are allowed in username"); 
@@ -86,8 +159,8 @@ function register()
 		if (isset($_POST['user_type'])) 
 		{
 			$user_type = e($_POST['user_type']);
-			$query = "INSERT INTO registered_users (username, email, user_type, password, date_time, ip_address) 
-					  VALUES('$username', '$email', '$user_type', '$password', '$date_time', '$ip_address')";
+			$query = "INSERT INTO registered_users (username, email, user_type, password, date_time, ip_address, user_os, user_browser) 
+					  VALUES('$username', '$email', '$user_type', '$password', '$date_time', '$ip_address', '$user_os', '$user_browser')";
 					  
 			mysqli_query($conn, $query);
 			$_SESSION['success']  = "New user successfully created!!";
@@ -95,10 +168,9 @@ function register()
 		}
 		else
 		{
-			$query = "INSERT INTO registered_users (username, email, user_type, password, date_time, ip_address) 
-					  VALUES('$username', '$email', 'user', '$password','$date_time','$ip_address')";
+			$query = "INSERT INTO registered_users (username, email, user_type, password, date_time, ip_address, user_os, user_browser) 
+					  VALUES('$username', '$email', '$user_type', '$password', '$date_time', '$ip_address', '$user_os', '$user_browser')";
 			mysqli_query($conn, $query);
-
 			// get id of the created user
 			$logged_in_user_id = mysqli_insert_id($conn);
 
@@ -189,7 +261,7 @@ if (isset($_POST['login_btn']))
 // LOGIN USER
 function login(){
 	
-	global $conn, $username, $errors, $ip_address;
+	global $conn, $username, $errors, $ip_address, $user_os, $user_browser;
 	date_default_timezone_set("Europe/Dublin");
  	$date_time = date("Y-m-d h:i:sa");
 
@@ -259,8 +331,8 @@ if($failed_attempts < 4){
 			$logged_in_user = mysqli_fetch_assoc($results);
 			if ($logged_in_user['user_type'] == 'admin') {
 				$user_type = "admin";
-				$query = "INSERT INTO user_logs (username, user_type, date_time, ip_address) 
-					  VALUES('$username', '$user_type', '$date_time', '$ip_address')";
+				$query = "INSERT INTO user_logs (username, user_type, date_time, ip_address, user_os, user_browser) 
+					  VALUES('$username', '$user_type', '$date_time', '$ip_address', '$user_os', '$user_browser')";
 					  
 			mysqli_query($conn, $query);
 
@@ -269,8 +341,8 @@ if($failed_attempts < 4){
 				header('location: admin/home.php');		  
 			}else{
 				$user_type = "user";
-				$query = "INSERT INTO user_logs (username, user_type, date_time, ip_address) 
-					  VALUES('$username', '$user_type', '$date_time', '$ip_address')";
+				$query = "INSERT INTO user_logs (username, user_type, date_time, ip_address, user_os, user_browser) 
+					  VALUES('$username', '$user_type', '$date_time', '$ip_address', '$user_os', '$user_browser')";
 					  
 			mysqli_query($conn, $query);
 
@@ -287,8 +359,8 @@ if($failed_attempts < 4){
 
 		else {
 		
-			$query = "INSERT INTO wrong_user_logs (username, date_time, ip_address) 
-					  VALUES('$username', '$date_time', '$ip_address')";
+			$query = "INSERT INTO wrong_user_logs (username, date_time, ip_address, user_os, user_browser) 
+					  VALUES('$username', '$date_time', '$ip_address', '$user_os', '$user_browser')";
 					  
 			mysqli_query($conn, $query);
 			$number = 1;
@@ -476,7 +548,7 @@ if (isset($_POST['add_comment']))
 
 function addComment()
 {
-	global $conn, $username, $errors, $success, $ip_address;
+	global $conn, $username, $errors, $success, $ip_address, $user_os, $user_browser;
 	$username = $_SESSION['user']['username'];
 	$error = '';
 	$comment_content = e($_POST["comment_content"]);
@@ -518,7 +590,7 @@ function addComment()
 			if(preg_match("/^[a-zA-Z0-9 ]+$/", $comment_content))
 				{
 	
-					$query = "INSERT INTO tbl_comment (parent_comment_id, comment, comment_sender_name, ip_address) VALUES ('0', '$comment_content', '$username', '$ip_address')";
+					$query = "INSERT INTO tbl_comment (parent_comment_id, comment, comment_sender_name, ip_address, user_os, user_browser) VALUES ('0', '$comment_content', '$username', '$ip_address', '$user_os', '$user_browser')";
 	 				mysqli_query($conn, $query);
 	 
 	 				array_push($success, "Comment was added");
@@ -543,7 +615,7 @@ function isLoggedIn()
 
 function isAdmin()
 {
-	global $conn, $username, $ip_address;
+	global $conn, $username, $ip_address, $user_os, $user_browser;
 	date_default_timezone_set("Europe/Dublin");
 	$date_time = date("Y-m-d h:i:sa");
 	$username = $_SESSION['user']['username'];
@@ -552,9 +624,9 @@ function isAdmin()
 	}else{
 		if($username != ' ')
 		{
-			
-		$query_insert = "INSERT INTO tried_to_access_admin_page (username, date_time, ip_address) 
-					  VALUES('$username', '$date_time', '$ip_address')";
+
+		$query_insert = "INSERT INTO tried_to_access_admin_page (username, date_time, ip_address, user_os, user_browser) 
+					  VALUES('$username', '$date_time', '$ip_address', '$user_os', '$user_browser')";
 					  
 			mysqli_query($conn, $query_insert);
 		}
