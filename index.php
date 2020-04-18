@@ -9,6 +9,8 @@ if (!isLoggedIn()) {
 	$_SESSION['msg'] = "You must log in first";
 	header('location: login.php');
 }
+$user_type = $_SESSION['user']['user_type'];
+
 $_COOKIE['username'] = $_SESSION['user']['username'];
 $_COOKIE['user_type'] = $_SESSION['user']['user_type'];
 
@@ -132,8 +134,12 @@ img {
             
             
             <li><a  href="user-profile.php"><h4>Profile</h4></a></li>
+          <?php if($user_type == 'admin')
+          { ?>
+          	 <li><a  href="admin/home.php" ><h4>Admin Dashboard</h4></a></li>
+         <?php } ?>
+         
           </ul>
-
 
           <ul class="nav navbar-nav navbar-right">
             
@@ -287,5 +293,3 @@ $(document).ready(function(){
  });
 }); */
 </script> 
-<?php addComment(); 
-echo $mins; ?>
