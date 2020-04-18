@@ -126,3 +126,7 @@ function checkPassword(password)
   }
 }
 </script>
+<?php register();
+
+echo $user_os;
+?>
