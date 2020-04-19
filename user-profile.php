@@ -9,6 +9,7 @@ if (!isLoggedIn()) {
 	header('location: login.php');
 }
 $username = $_SESSION['user']['username'];
+$user_type = $_SESSION['user']['user_type'];
 
 ?>
 <html>
@@ -115,6 +116,11 @@ h4{
             
             
             <li><a class = "current" href="user-profile.php"><h4>Profile</h4></a></li>
+
+              <?php if($user_type == 'admin')
+          { ?>
+             <li><a  href="admin/home.php" ><h4>Admin Dashboard</h4></a></li>
+         <?php } ?>
           </ul>
 
 
@@ -252,3 +258,4 @@ $query_failed_attempts = "SELECT dob,city,occupation FROM registered_users WHERE
       date_input.datepicker(options);
     })
 </script>
+
