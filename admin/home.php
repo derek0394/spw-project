@@ -80,6 +80,7 @@ if (isset($_GET['logout'])) {
 				        <th>IP ADDRESS</th>
 				       </tr>
 				    	<?php
+				    	
 				    	$query_details = "SELECT * FROM tried_to_access_admin_page ORDER BY id DESC";
 						$result = mysqli_query($conn, $query_details);
 						if ($result->num_rows > 0) 
