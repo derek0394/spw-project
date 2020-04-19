@@ -123,7 +123,32 @@ function register()
 	$password_1  =  e($_POST['password_1']);
 	$password_2  =  e($_POST['password_2']);
 
-	echo $user_browser;
+	$mysqli = new mysqli('dyud5fa2qycz1o3v.cbetxkdyhwsb.us-east-1.rds.amazonaws.com', 'ulo9xf8ad5xednpc', 'mmlbrz7cagzqssyg', 'itrdhg03zk2ikdkj');
+		
+	$stmt = $mysqli->prepare("SELECT * FROM registered_users WHERE username = ?");
+	$stmt->bind_param("s", $username);
+	$stmt->execute();
+	$result = $stmt->get_result();
+
+	while($row = $result->fetch_assoc()) {
+	  $username_from_DB = $row['username'];
+	 
+	}
+	$stmt->close();
+
+	$stmt = $mysqli->prepare("SELECT * FROM registered_users WHERE email = ?");
+	$stmt->bind_param("s", $email);
+	$stmt->execute();
+	$result = $stmt->get_result();
+
+	while($row = $result->fetch_assoc()) {
+	  $email_from_DB = $row['email'];
+	 
+	}
+	$stmt->close();
+
+
+	
 	if(!preg_match("/^[a-zA-Z0-9]+$/", $username))
 	{
 		array_push($errors, "Only alphabets and numbers are allowed in username"); 
@@ -132,6 +157,10 @@ function register()
 	if (empty($username)) { 
 		array_push($errors, "Username is required"); 
 	}
+	if(strlen($username) >= 11)
+	{
+		array_push($errors, "Max username length should be 10"); 
+	}
 	if (empty($email)) { 
 		array_push($errors, "Email is required"); 
 	}
@@ -139,10 +168,24 @@ function register()
 		array_push($errors, "Password is required"); 
 	}
 	if ($password_1 != $password_2) {
-		
+		array_push($errors, "Passwords do not match"); 
 	}
-	if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+	if(strlen($password_1) <= 9)
+	{
+		array_push($errors, "Minimum password length should be 10"); 
+	}
+	
+	if ((!filter_var($email, FILTER_VALIDATE_EMAIL)) && ($email != '')) {
     	array_push($errors, "Invalid Email ID");
+	}
+	
+	if($username == $username_from_DB)
+	{
+		array_push($errors, "Username already exists");
+	}
+	if(($email == $email_from_DB) && ($email != ''))
+	{
+		array_push($errors, "Email already exists");
 	}
 
 	date_default_timezone_set("Europe/Dublin");
@@ -158,19 +201,25 @@ function register()
 
 		if (isset($_POST['user_type'])) 
 		{
-			$user_type = e($_POST['user_type']);
 			$query = "INSERT INTO registered_users (username, email, user_type, password, date_time, ip_address, user_os, user_browser) 
-					  VALUES('$username', '$email', '$user_type', '$password', '$date_time', '$ip_address', '$user_os', '$user_browser')";
+					  VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+					  $user_type = 'user';
 					  
-			mysqli_query($conn, $query);
+			$stmt = mysqli_prepare($conn, $query);
+			mysqli_stmt_bind_param($stmt, "ssssssss", $username, $email, $user_type, $password, $date_time, $ip_address, $user_os, $user_browser);
+			mysqli_stmt_execute($stmt);
 			$_SESSION['success']  = "New user successfully created!!";
 			header('location: home.php');
 		}
 		else
 		{
 			$query = "INSERT INTO registered_users (username, email, user_type, password, date_time, ip_address, user_os, user_browser) 
-					  VALUES('$username', '$email', '$user_type', '$password', '$date_time', '$ip_address', '$user_os', '$user_browser')";
-			mysqli_query($conn, $query);
+					  VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+					  $user_type = 'user';
+					  
+			$stmt = mysqli_prepare($conn, $query);
+			mysqli_stmt_bind_param($stmt, "ssssssss", $username, $email, $user_type, $password, $date_time, $ip_address, $user_os, $user_browser);
+			mysqli_stmt_execute($stmt);
 			// get id of the created user
 			$logged_in_user_id = mysqli_insert_id($conn);
 
@@ -324,7 +373,7 @@ if($failed_attempts < 4){
 			$results = mysqli_query($conn, $query);
 
 			$query1 = "UPDATE registered_users SET failed_attempts = 0 WHERE username = '$username'";
-				echo $query1;
+				//echo $query1;
 				mysqli_query($conn, $query1);
 
 			// check if user is admin or user
@@ -332,9 +381,11 @@ if($failed_attempts < 4){
 			if ($logged_in_user['user_type'] == 'admin') {
 				$user_type = "admin";
 				$query = "INSERT INTO user_logs (username, user_type, date_time, ip_address, user_os, user_browser) 
-					  VALUES('$username', '$user_type', '$date_time', '$ip_address', '$user_os', '$user_browser')";
+					  VALUES(?, ?, ?, ?, ?, ?)";
 					  
-			mysqli_query($conn, $query);
+			$stmt = mysqli_prepare($conn, $query);
+			mysqli_stmt_bind_param($stmt, "ssssss", $username, $user_type, $date_time, $ip_address, $user_os, $user_browser);
+			mysqli_stmt_execute($stmt);
 
 				$_SESSION['user'] = $logged_in_user;
 				$_SESSION['success']  = "You are now logged in";
@@ -342,9 +393,11 @@ if($failed_attempts < 4){
 			}else{
 				$user_type = "user";
 				$query = "INSERT INTO user_logs (username, user_type, date_time, ip_address, user_os, user_browser) 
-					  VALUES('$username', '$user_type', '$date_time', '$ip_address', '$user_os', '$user_browser')";
+					  VALUES(?, ?, ?, ?, ?, ?)";
 					  
-			mysqli_query($conn, $query);
+			$stmt = mysqli_prepare($conn, $query);
+			mysqli_stmt_bind_param($stmt, "ssssss", $username, $user_type, $date_time, $ip_address, $user_os, $user_browser);
+			mysqli_stmt_execute($stmt);
 
 				$_SESSION['user'] = $logged_in_user;
 				$_SESSION['success']  = "You are now logged in";
@@ -356,21 +409,24 @@ if($failed_attempts < 4){
 			}
 			}
 			
-
 		else {
 		
 			$query = "INSERT INTO wrong_user_logs (username, date_time, ip_address, user_os, user_browser) 
-					  VALUES('$username', '$date_time', '$ip_address', '$user_os', '$user_browser')";
+					  VALUES(?, ?, ?, ?, ?)";
 					  
-			mysqli_query($conn, $query);
+			$stmt = mysqli_prepare($conn, $query);
+			mysqli_stmt_bind_param($stmt, "sssss", $username, $date_time, $ip_address, $user_os, $user_browser);
+			mysqli_stmt_execute($stmt);
 			$number = 1;
    							$failed_attempts_1 = $failed_attempts + $number;
 			
 				if($failed_attempts < 5)
 				{
-				$query1 = "UPDATE registered_users SET failed_attempts = '$failed_attempts_1' WHERE username = '$username'";
+				$query1 = "UPDATE registered_users SET failed_attempts = ? WHERE username = ?";
 				
-				mysqli_query($conn, $query1);
+				$stmt = mysqli_prepare($conn, $query1);
+			mysqli_stmt_bind_param($stmt, "ss", $failed_attempts_1, $username);
+			mysqli_stmt_execute($stmt);
 			}
 			
 			
@@ -411,21 +467,26 @@ function uploadProfileDetails()
 	{
    		if($dob !='')
    		{
-	      	 $query_dob = "UPDATE registered_users SET dob = '$dob' WHERE username = '$username'";
-	      	 mysqli_query($conn, $query_dob);
+	      	 $query_dob = "UPDATE registered_users SET dob = ? WHERE username = ?";
+	      	$stmt = mysqli_prepare($conn, $query_dob);
+			mysqli_stmt_bind_param($stmt, "ss", $dob, $username);
+			mysqli_stmt_execute($stmt);
       	}
       
         //$query_address = "UPDATE registered_users SET address = '$address' WHERE username = '$username'";
       	if($city !='')
    			{
-			    $query_city = "UPDATE registered_users SET city = '$city' WHERE username = '$username'";
-			     mysqli_query($conn, $query_city);
+			    $query_city = "UPDATE registered_users SET city = ? WHERE username = ?";
+	      	$stmt = mysqli_prepare($conn, $query_city);
+			mysqli_stmt_bind_param($stmt, "ss", $city, $username);
+			mysqli_stmt_execute($stmt);
      		}
         if($occupation !='')
    			{
-		        $query_occupation = "UPDATE registered_users SET occupation = '$occupation' WHERE 
-		        username = '$username'";
-		        mysqli_query($conn, $query_occupation);
+		        $query_occupation = "UPDATE registered_users SET occupation = ? WHERE username = ?";
+	      	$stmt = mysqli_prepare($conn, $query_occupation);
+			mysqli_stmt_bind_param($stmt, "ss", $occupation, $username);
+			mysqli_stmt_execute($stmt);
      		}
         
        // mysqli_query($conn, $query_address);
@@ -456,19 +517,32 @@ function uploadImage()
 	$uploadOk = 1;
 	$imageFileType = strtolower(pathinfo($original_name,PATHINFO_EXTENSION));
 	// Check if image file is a actual image or fake image
+	
 	if(isset($_POST["add_image"])) {
 	    $check = getimagesize($_FILES["image"]["tmp_name"]);
 	    if($check !== false) {
-	        //echo "File is an image - " . $check["mime"] . ".";
+	        
 	        $uploadOk = 1;
 	    } else {
-	        //array_push($errors, "File is not an image.");
+	       
 	        $uploadOk = 0;
 	    }
 	}
+
 	if(basename($_FILES["image"]["name"]) != '')
 	{
-
+		if(!preg_match("`^[-0-9A-Za-z_\.]+$`i", $original_name))
+		{
+			  array_push($errors, "Only letters and numbers are allowed in filename.");
+	    $uploadOk = 0;
+	}
+	if(mb_strlen($original_name,"UTF-8") > 225)
+	{
+		{
+			  array_push($errors, "Image name is too large");
+	    $uploadOk = 0;
+	}
+	}
 	// Check file size
 	if ($_FILES["image"]["size"] > 500000) {
 	    array_push($errors, "Sorry, your file is too large.");
@@ -490,14 +564,16 @@ function uploadImage()
 
 		 if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
 	        array_push($success, "Your profile picture was successfully updated.");
-	         $query_profile_url = "UPDATE registered_users SET profile_url = '$profile_url' WHERE username = '$username'";
-	      	 mysqli_query($conn, $query_profile_url);
+	         $query_profile_url = "UPDATE registered_users SET profile_url = ? WHERE username = ?";
+	      	 $stmt = mysqli_prepare($conn, $query_profile_url);
+			mysqli_stmt_bind_param($stmt, "ss", $profile_url, $username);
+			mysqli_stmt_execute($stmt);
 	       }
 	       else {
 	        array_push($errors, "Sorry, there was an error uploading your file.");
 	    }
-	}}
-		
+	}
+		}
 	}
 
 if (isset($_POST['delete-user-btn'])) {
@@ -534,8 +610,10 @@ global $conn, $username, $errors, $success, $password;
    				if($user ==1)
    				{
    					array_push($success, "User was successfully deleted");
-   					$query_delete = "DELETE FROM registered_users WHERE username = '$user_to_delete'";
-   					mysqli_query($conn, $query_delete);
+   					$query_delete = "DELETE FROM registered_users WHERE username = ?";
+   					$stmt = mysqli_prepare($conn, $query_delete);
+					mysqli_stmt_bind_param($stmt, "s", $user_to_delete);
+					mysqli_stmt_execute($stmt);
    				}
    							
    					
@@ -589,9 +667,11 @@ function addComment()
 		{
 			if(preg_match("/^[a-zA-Z0-9 ]+$/", $comment_content))
 				{
-	
-					$query = "INSERT INTO tbl_comment (parent_comment_id, comment, comment_sender_name, ip_address, user_os, user_browser) VALUES ('0', '$comment_content', '$username', '$ip_address', '$user_os', '$user_browser')";
-	 				mysqli_query($conn, $query);
+					$parent_comment_id = 0;
+					$query = "INSERT INTO tbl_comment (parent_comment_id, comment, comment_sender_name, ip_address, user_os, user_browser) VALUES (?,?,?,?,?,?)";
+	 				$stmt = mysqli_prepare($conn, $query);
+					mysqli_stmt_bind_param($stmt, "ssssss", $parent_comment_id, $comment_content, $username, $ip_address, $user_os, $user_browser);
+					mysqli_stmt_execute($stmt);
 	 
 	 				array_push($success, "Comment was added");
 				}
@@ -619,16 +699,32 @@ function isAdmin()
 	date_default_timezone_set("Europe/Dublin");
 	$date_time = date("Y-m-d h:i:sa");
 	$username = $_SESSION['user']['username'];
+	if($username == '')
+	{
+		$username = "UNKNOWN";
+	}
 	if (isset($_SESSION['user']) && $_SESSION['user']['user_type'] == 'admin' ) {
 		return true;
 	}else{
 		if($username != ' ')
 		{
 
-		$query_insert = "INSERT INTO tried_to_access_admin_page (username, date_time, ip_address, user_os, user_browser) 
-					  VALUES('$username', '$date_time', '$ip_address', '$user_os', '$user_browser')";
+
+		$query_insert = "INSERT INTO tried_to_access_admin_page (username, date_time, ip_address, user_os, user_browser) VALUES(?, ?, ?, ?, ?)";
 					  
-			mysqli_query($conn, $query_insert);
+			$stmt = mysqli_prepare($conn, $query_insert);
+					mysqli_stmt_bind_param($stmt, "sssss", $username, $date_time, $ip_address, $user_os, 
+						$user_browser);
+					mysqli_stmt_execute($stmt);
+		}else {
+			
+				$query_insert = "INSERT INTO tried_to_access_admin_page (username, date_time, ip_address, user_os, user_browser) VALUES(?, ?, ?, ?, ?)";
+					  
+			$stmt = mysqli_prepare($conn, $query_insert);
+					mysqli_stmt_bind_param($stmt, "sssss", $username, $date_time, $ip_address, $user_os, 
+						$user_browser);
+					mysqli_stmt_execute($stmt);
+			
 		}
 		return false;
 	}
