@@ -622,7 +622,7 @@ function addComment()
 	date_default_timezone_set("Europe/Dublin");
 	$date_time = date("Y-m-d h:i:sa");
 		
-	$query_time = "SELECT date FROM tbl_comment";
+	/*$query_time = "SELECT date FROM tbl_comment";
 		$result = mysqli_query($conn, $query_time);
 		if ($result->num_rows > 0) 
 		{
@@ -631,7 +631,7 @@ function addComment()
 				$date_time_from_DB[] = $row['date'];			
 			}
 		}
-		/*print_r($date_time_from_DB);
+		print_r($date_time_from_DB);
 		//echo sizeof($date_time_from_DB);
 		for($i=0; $i< sizeof($date_time_from_DB); $i++)
 		{
@@ -657,9 +657,9 @@ function addComment()
 			if(preg_match("/^[a-zA-Z0-9 ]+$/", $comment_content))
 				{
 					$parent_comment_id = 0;
-					$query = "INSERT INTO tbl_comment (parent_comment_id, comment, comment_sender_name, ip_address, user_os, user_browser) VALUES (?,?,?,?,?,?)";
+					$query = "INSERT INTO tbl_comment (parent_comment_id, comment, comment_sender_name, ip_address, user_os, user_browser, date) VALUES (?,?,?,?,?,?,?)";
 	 				$stmt = mysqli_prepare($conn, $query);
-					mysqli_stmt_bind_param($stmt, "ssssss", $parent_comment_id, $comment_content, $username, $ip_address, $user_os, $user_browser);
+					mysqli_stmt_bind_param($stmt, "sssssss", $parent_comment_id, $comment_content, $username, $ip_address, $user_os, $user_browser, $date_time);
 					mysqli_stmt_execute($stmt);
 	 
 	 				array_push($success, "Comment was added");
