@@ -537,7 +537,7 @@ function uploadImage()
 	    $uploadOk = 0;
 	}
 
-	if(mb_strlen($filename,"UTF-8") > 225)
+	if(mb_strlen($original_name,"UTF-8") > 225)
 	{
 		 array_push($errors, "File name is too large");
 	    $uploadOk = 0;
