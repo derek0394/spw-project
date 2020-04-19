@@ -510,10 +510,21 @@ function uploadImage()
 	global $conn, $username, $errors, $success;
 	$username = $_SESSION['user']['username'];
 
+	function random_string($length) {
+	    $key = '';
+	    $keys = array_merge(range(0, 9), range('a', 'z'));
+
+	    for ($i = 0; $i < $length; $i++) {
+	        $key .= $keys[array_rand($keys)];
+	    }
+	    return $key;
+	}
+	$random_name = random_string(10);
 	$target_dir = "images/";
-	$target_file = $target_dir . basename($username."_profile_picture.png");
+	$target_file = $target_dir . basename($random_name.".png");
 	$original_name = basename($_FILES['image']["name"]);
-	$profile_url = basename($username."_profile_picture.png");
+	$profile_url = basename($random_name.".png");
+	$tmp_name = $_FILES["image"]["tmp_name"];
 	$uploadOk = 1;
 	$imageFileType = strtolower(pathinfo($original_name,PATHINFO_EXTENSION));
 	// Check if image file is a actual image or fake image
@@ -521,23 +532,24 @@ function uploadImage()
 	if(isset($_POST["add_image"])) {
 	    $check = getimagesize($_FILES["image"]["tmp_name"]);
 	    if($check !== false) {
-	        
 	        $uploadOk = 1;
 	    } else {
-	       
 	        $uploadOk = 0;
 	    }
 	}
 
 	if(basename($_FILES["image"]["name"]) != '')
 	{
+		$pattern = "#^(image/)[^\s\n<]+$#i";
+		if(!preg_match($pattern, $check['mime'])){
+        array_push($errors, "Only image files are allowed");
+	    $uploadOk = 0;
+    }
 		if((!preg_match("`^[-0-9A-Z_\.]+$`i",$original_name)))
 			{
 	    array_push($errors, "Special characters aren't allowed in file name");
 	    $uploadOk = 0;
 	}
-
-		
 	// Check file size
 	if ($_FILES["image"]["size"] > 500000) {
 	    array_push($errors, "Sorry, your file is too large.");
@@ -545,9 +557,8 @@ function uploadImage()
 	}
 	// Allow certain file formats
 	/* Valid Extensions */
-	if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-	&& $imageFileType != "gif" ) {
-	    array_push($errors, "Sorry, only JPG, JPEG, PNG & GIF files are allowed.");
+	if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
+	    array_push($errors, "Sorry, only JPG, JPEG, PNG files are allowed.");
 	    $uploadOk = 0;
 	}
 		
@@ -557,7 +568,7 @@ function uploadImage()
 	// if everything is ok, try to upload file
 	} else {
 
-		 if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
+		 if (move_uploaded_file($tmp_name, $target_file)) {
 	        array_push($success, "Your profile picture was successfully updated.");
 	         $query_profile_url = "UPDATE registered_users SET profile_url = ? WHERE username = ?";
 	      	 $stmt = mysqli_prepare($conn, $query_profile_url);
