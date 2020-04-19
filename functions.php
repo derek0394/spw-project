@@ -533,8 +533,15 @@ function uploadImage()
 	{
 		if((!preg_match("`^[-0-9A-Z_\.]+$`i",$original_name)))
 			{
-	    array_push($errors, "Only alphanumeric characters are allowed in file name");
+	    array_push($errors, "Special characters aren't allowed in file name");
 	    $uploadOk = 0;
+	}
+
+	if(mb_strlen($filename,"UTF-8") > 225)
+	{
+		 array_push($errors, "File name is too large");
+	    $uploadOk = 0;
+
 	}
 		
 	// Check file size
