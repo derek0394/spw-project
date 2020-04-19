@@ -531,18 +531,7 @@ function uploadImage()
 
 	if(basename($_FILES["image"]["name"]) != '')
 	{
-		if(!preg_match("`^[-0-9A-Za-z_\.]+$`i", $original_name))
-		{
-			  array_push($errors, "Only letters and numbers are allowed in filename.");
-	    $uploadOk = 0;
-	}
-	if(mb_strlen($original_name,"UTF-8") > 225)
-	{
-		{
-			  array_push($errors, "Image name is too large");
-	    $uploadOk = 0;
-	}
-	}
+		
 	// Check file size
 	if ($_FILES["image"]["size"] > 500000) {
 	    array_push($errors, "Sorry, your file is too large.");
