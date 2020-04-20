@@ -148,7 +148,23 @@ function register()
 	$stmt->close();
 
 
-	
+	if(isset($_POST['g-recaptcha-response'])){
+      $captcha=$_POST['g-recaptcha-response'];
+    }
+      if(isset($_POST['g-recaptcha-response'])){
+          $captcha=$_POST['g-recaptcha-response'];
+        }
+        if(!$captcha){
+          array_push($errors, "Invalid Captcha");
+        }
+        $secretKey = "6LeHrOsUAAAAAH08StL8jfEuyjqv2oreG-HVomDX";
+        $ip = $_SERVER['REMOTE_ADDR'];
+        // post request to server
+        $url = 'https://www.google.com/recaptcha/api/siteverify?secret=' . urlencode($secretKey) .  '&response=' . urlencode($captcha);
+        $response = file_get_contents($url);
+        $responseKeys = json_decode($response,true);
+
+        
 	if(!preg_match("/^[a-zA-Z0-9]+$/", $username))
 	{
 		array_push($errors, "Only alphabets and numbers are allowed in username"); 
