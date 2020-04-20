@@ -32,7 +32,7 @@ if(mysqli_num_rows($result) > 0)
   <tr>
   ';
  }
- echo $output;
+ 
 }
 else
 {
