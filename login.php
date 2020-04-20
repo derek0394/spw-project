@@ -12,6 +12,8 @@ if (isLoggedIn()) {
 <link rel="stylesheet" type="text/css" href="css/style.css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
 <!------ Include the above in your HEAD tag ---------->
 
 <div class="wrapper fadeInDown">
@@ -24,12 +26,14 @@ if (isLoggedIn()) {
     </div> 
 
     <!-- Login Form -->
+     <script src='https://www.google.com/recaptcha/api.js' async defer></script>
     <form method = "post" action="login.php" style = "margin-top: 5%;">
       <?php echo display_error(); ?>
       <input type="text" id="username" class="fadeIn second" name="username" placeholder="Username">
       <input type="text" id="password" class="fadeIn third" name="password" placeholder="Password">
-     
+    
       <input type="submit" class="fadeIn fourth" name="login_btn" value="submit">
+       <div class="g-recaptcha" data-sitekey="6LeHrOsUAAAAAHySsqTa4vjW82EvwOTHVLF_x5BR"></div>
         <title>reCAPTCHA demo: Explicit render after an onload callback</title>
     <script type="text/javascript">
       var onloadCallback = function() {
@@ -39,14 +43,6 @@ if (isLoggedIn()) {
       };
     </script>
  
-
-      <div id="html_element"></div>
-      <br>
-    
-   
-    <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
-        async defer>
-    </script>
    
     
     </form>
