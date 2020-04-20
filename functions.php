@@ -148,7 +148,7 @@ function register()
 	$stmt->close();
 
 
-	if(isset($_POST['g-recaptcha-response'])){
+	/*if(isset($_POST['g-recaptcha-response'])){
       $captcha=$_POST['g-recaptcha-response'];
     }
       if(isset($_POST['g-recaptcha-response'])){
@@ -162,7 +162,7 @@ function register()
         // post request to server
         $url = 'https://www.google.com/recaptcha/api/siteverify?secret=' . urlencode($secretKey) .  '&response=' . urlencode($captcha);
         $response = file_get_contents($url);
-        $responseKeys = json_decode($response,true);
+        $responseKeys = json_decode($response,true); */
 
 
 	if(!preg_match("/^[a-zA-Z0-9]+$/", $username))
@@ -333,7 +333,7 @@ function login(){
 	// grap form values
 	$username = strtolower(e($_POST['username'])); 
 	$password = e($_POST['password']);
-	if(isset($_POST['g-recaptcha-response'])){
+	/*if(isset($_POST['g-recaptcha-response'])){
       $captcha=$_POST['g-recaptcha-response'];
     }
       if(isset($_POST['g-recaptcha-response'])){
@@ -347,7 +347,7 @@ function login(){
         // post request to server
         $url = 'https://www.google.com/recaptcha/api/siteverify?secret=' . urlencode($secretKey) .  '&response=' . urlencode($captcha);
         $response = file_get_contents($url);
-        $responseKeys = json_decode($response,true);
+        $responseKeys = json_decode($response,true); */
        
 	// make sure form is filled properly
 	if (empty($username)) {
@@ -456,7 +456,7 @@ if($failed_attempts < 4){
 				$query1 = "UPDATE registered_users SET failed_attempts = ? WHERE username = ?";
 				
 				$stmt = mysqli_prepare($conn, $query1);
-			mysqli_stmt_bind_param($stmt, "ss", $failed_attempts_1, $username);
+			mysqli_stmt_bind_param($stmt, "si", $failed_attempts_1, $username);
 			mysqli_stmt_execute($stmt);
 			}
 			
@@ -742,5 +742,6 @@ function isAdmin()
 		return false;
 	}
 }
+
 
 ?>
