@@ -669,25 +669,8 @@ function addComment()
 	$comment_content = e($_POST["comment_content"]);
 	date_default_timezone_set("Europe/Dublin");
 	$date_time = date("Y-m-d h:i:sa");
-		
-	if(isset($_POST['g-recaptcha-response'])){
-      $captcha=$_POST['g-recaptcha-response'];
-    }
-      if(isset($_POST['g-recaptcha-response'])){
-          $captcha=$_POST['g-recaptcha-response'];
-        }
-        if(!$captcha){
-          array_push($errors, "Invalid Captcha");
-        }
-        $secretKey = "6LeHrOsUAAAAAH08StL8jfEuyjqv2oreG-HVomDX";
-        $ip = $_SERVER['REMOTE_ADDR'];
-        // post request to server
-        $url = 'https://www.google.com/recaptcha/api/siteverify?secret=' . urlencode($secretKey) .  '&response=' . urlencode($captcha);
-        $response = file_get_contents($url);
-        $responseKeys = json_decode($response,true);
-	
-        if (count($errors) == 0)
-        {
+			
+
 	if(empty($_POST["comment_content"]))
 		{
 			array_push($errors, "Comment is required");
@@ -710,7 +693,7 @@ function addComment()
 				}
 		}
 
-}}
+}
 			
 
 function isLoggedIn()
