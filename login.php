@@ -29,7 +29,24 @@ if (isLoggedIn()) {
       <input type="text" id="username" class="fadeIn second" name="username" placeholder="Username">
       <input type="text" id="password" class="fadeIn third" name="password" placeholder="Password">
      
-      <input type="submit" class="fadeIn fourth" name="login_btn">
+      <input type="submit" class="fadeIn fourth" name="login_btn" value="submit">
+        <title>reCAPTCHA demo: Explicit render after an onload callback</title>
+    <script type="text/javascript">
+      var onloadCallback = function() {
+        grecaptcha.render('html_element', {
+          'sitekey' : '6LeHrOsUAAAAAHySsqTa4vjW82EvwOTHVLF_x5BR'
+        });
+      };
+    </script>
+ 
+    <form action="?" method="POST">
+      <div id="html_element"></div>
+      <br>
+    
+    </form>
+    <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+        async defer>
+    </script>
    
     
     </form>
@@ -49,23 +66,5 @@ if (isLoggedIn()) {
 </div>
 
      
-    <title>reCAPTCHA demo: Explicit render after an onload callback</title>
-    <script type="text/javascript">
-      var onloadCallback = function() {
-        grecaptcha.render('html_element', {
-          'sitekey' : '6LeHrOsUAAAAAHySsqTa4vjW82EvwOTHVLF_x5BR'
-        });
-      };
-    </script>
-  </head>
-  <body>
-    <form action="?" method="POST">
-      <div id="html_element"></div>
-      <br>
-      <input type="submit" value="Submit">
-    </form>
-    <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
-        async defer>
-    </script>
-  </body>
-</html>
+  
+
