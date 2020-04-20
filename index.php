@@ -171,7 +171,8 @@ $query_profile_url = "SELECT profile_url FROM registered_users WHERE username = 
   
    	<h4 id = "profile-details"><b>
    <?php echo $_SESSION['user']['username']; ?>
-</b></h4><br>
+</b></h4>
+<br>
 <div class="col-sm-12" >
 <div class="form-group col-sm-4">
   <img src='images/<?php echo "$profile_url"; ?> '>
