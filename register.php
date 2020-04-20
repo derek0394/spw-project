@@ -41,7 +41,7 @@ if (isLoggedIn()) {
       <progress value="0" max="100" id = "strength" style="width: 230px;"></progress>
       <input type="password" id="password" class="fadeIn third" name="password_2" placeholder="Re-type password">
       
-    <input type="submit" class="fadeIn fourth" name="register_btn">
+    <input type="submit" class="fadeIn fourth" name="register_btn" value = "Sign Up">
    <div class="g-recaptcha" data-sitekey="6LeHrOsUAAAAAHySsqTa4vjW82EvwOTHVLF_x5BR"></div>
         
       
