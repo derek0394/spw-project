@@ -192,7 +192,7 @@ $query_profile_url = "SELECT profile_url FROM registered_users WHERE username = 
 
   </div>
 </div>
-   
+    <script src='https://www.google.com/recaptcha/api.js' async defer></script>
      <form method="POST" id="comment_form">
     <div class="form-group">
      <textarea name="comment_content" id="comment_content" class="form-control" value = '' placeholder="World chat (max 50 words)" rows="5"></textarea>
@@ -201,6 +201,7 @@ $query_profile_url = "SELECT profile_url FROM registered_users WHERE username = 
     <div class="form-group">
      <input type="hidden" name="comment_id" id="comment_id" value="0" />
      <input type="submit" name="add_comment" id="submit" class="btn btn-info" value="Submit" />
+      <div class="g-recaptcha" data-sitekey="6LeHrOsUAAAAAHySsqTa4vjW82EvwOTHVLF_x5BR"></div>
     </div>
    </form>
 
