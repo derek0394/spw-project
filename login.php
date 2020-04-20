@@ -33,17 +33,12 @@ if (isLoggedIn()) {
     <form method = "post" action="login.php" style = "margin-top: 5%;">
       <?php echo display_error(); ?>
       <input type="text" id="username" class="fadeIn second" name="username" placeholder="Username">
-      <input type="text" id="password" class="fadeIn third" name="password" placeholder="Password">
+      <input type="password" id="password" class="fadeIn third" name="password" placeholder="Password">
     
       <input type="submit" class="fadeIn fourth" name="login_btn" value="submit">
        <div class="g-recaptcha" data-sitekey="6LeHrOsUAAAAAHySsqTa4vjW82EvwOTHVLF_x5BR"></div>
         
-   
- 
-   
-    
     </form>
-
    
      <p>
       Not yet a member? 
