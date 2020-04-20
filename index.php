@@ -217,6 +217,7 @@ $query_profile_url = "SELECT profile_url FROM registered_users WHERE username = 
 </body>
 </html>
 
+
 <script>
 $(document).ready(function(){
  
