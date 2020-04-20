@@ -149,6 +149,9 @@ $query_failed_attempts = "SELECT dob,city,occupation FROM registered_users WHERE
   <div class = "col-sm-6">
   	<div class="form-group col-sm-12">
   		<div class = "col-sm-6">
+        <h4><b>
+   <a href="password_reset.php">Reset Password</a>
+</b></h4>
     		 <h3>Your Personal Info</h3>
     	</div>
  	</div>
