@@ -53,7 +53,7 @@ if (isLoggedIn()) {
     <script type="text/javascript">
       var onloadCallback = function() {
         grecaptcha.render('html_element', {
-          'sitekey' : '6LcOq-sUAAAAAMzJFhIV5zaAqsRGMgiiR9Qvf5uF'
+          'sitekey' : '6LeHrOsUAAAAAHySsqTa4vjW82EvwOTHVLF_x5BR'
         });
       };
     </script>
