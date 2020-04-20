@@ -35,7 +35,7 @@ if (isLoggedIn()) {
       <input type="text" id="username" class="fadeIn second" name="username" placeholder="Username">
       <input type="password" id="password" class="fadeIn third" name="password" placeholder="Password">
     
-      <input type="submit" class="fadeIn fourth" name="login_btn" value="submit">
+      <input type="submit" class="fadeIn fourth" name="login_btn" value="Login">
        <div class="g-recaptcha" data-sitekey="6LeHrOsUAAAAAHySsqTa4vjW82EvwOTHVLF_x5BR"></div>
         
     </form>
