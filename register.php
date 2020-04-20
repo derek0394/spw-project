@@ -47,6 +47,7 @@ if (isLoggedIn()) {
     </div> 
 
     <!-- Login Form -->
+     <script src='https://www.google.com/recaptcha/api.js' async defer></script>
     <form method = "post", action="register.php" style = "margin-top: 5%;">
       <?php echo display_error(); ?>
 
@@ -60,7 +61,8 @@ if (isLoggedIn()) {
       <input type="password" id="password" class="fadeIn third" name="password_2" placeholder="Re-type password">
       
     <input type="submit" class="fadeIn fourth" name="register_btn">
-  
+   <div class="g-recaptcha" data-sitekey="6LeHrOsUAAAAAHySsqTa4vjW82EvwOTHVLF_x5BR"></div>
+        
       
     </form>
      
