@@ -164,7 +164,7 @@ function register()
         $response = file_get_contents($url);
         $responseKeys = json_decode($response,true);
 
-        
+
 	if(!preg_match("/^[a-zA-Z0-9]+$/", $username))
 	{
 		array_push($errors, "Only alphabets and numbers are allowed in username"); 
@@ -670,31 +670,24 @@ function addComment()
 	date_default_timezone_set("Europe/Dublin");
 	$date_time = date("Y-m-d h:i:sa");
 		
-	/*$query_time = "SELECT date FROM tbl_comment";
-		$result = mysqli_query($conn, $query_time);
-		if ($result->num_rows > 0) 
-		{
-			while($row = $result->fetch_assoc()) 
-			{
-				$date_time_from_DB[] = $row['date'];			
-			}
-		}
-		print_r($date_time_from_DB);
-		//echo sizeof($date_time_from_DB);
-		for($i=0; $i< sizeof($date_time_from_DB); $i++)
-		{
-
-		$start_date[$i] = new DateTime($date_time_from_DB[$i]);
-		$since_start[$i] = $start_date[$i]->diff(new DateTime($date_time));
-
-		$mins[$i] =  $since_start[$i]->i."<br>";
-		print_r($mins[$i]);
-	}*/
-
-		
+	if(isset($_POST['g-recaptcha-response'])){
+      $captcha=$_POST['g-recaptcha-response'];
+    }
+      if(isset($_POST['g-recaptcha-response'])){
+          $captcha=$_POST['g-recaptcha-response'];
+        }
+        if(!$captcha){
+          array_push($errors, "Invalid Captcha");
+        }
+        $secretKey = "6LeHrOsUAAAAAH08StL8jfEuyjqv2oreG-HVomDX";
+        $ip = $_SERVER['REMOTE_ADDR'];
+        // post request to server
+        $url = 'https://www.google.com/recaptcha/api/siteverify?secret=' . urlencode($secretKey) .  '&response=' . urlencode($captcha);
+        $response = file_get_contents($url);
+        $responseKeys = json_decode($response,true);
 	
-	
-
+        if (count($errors) == 0)
+        {
 	if(empty($_POST["comment_content"]))
 		{
 			array_push($errors, "Comment is required");
@@ -717,7 +710,7 @@ function addComment()
 				}
 		}
 
-}
+}}
 			
 
 function isLoggedIn()
