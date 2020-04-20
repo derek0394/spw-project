@@ -317,7 +317,22 @@ function login(){
 	// grap form values
 	$username = strtolower(e($_POST['username'])); 
 	$password = e($_POST['password']);
-
+	if(isset($_POST['g-recaptcha-response'])){
+      $captcha=$_POST['g-recaptcha-response'];
+    }
+      if(isset($_POST['g-recaptcha-response'])){
+          $captcha=$_POST['g-recaptcha-response'];
+        }
+        if(!$captcha){
+          array_push($errors, "Invalid Captcha");
+        }
+        $secretKey = "6LeHrOsUAAAAAH08StL8jfEuyjqv2oreG-HVomDX";
+        $ip = $_SERVER['REMOTE_ADDR'];
+        // post request to server
+        $url = 'https://www.google.com/recaptcha/api/siteverify?secret=' . urlencode($secretKey) .  '&response=' . urlencode($captcha);
+        $response = file_get_contents($url);
+        $responseKeys = json_decode($response,true);
+       
 	// make sure form is filled properly
 	if (empty($username)) {
 		array_push($errors, "Username is required");
