@@ -47,7 +47,7 @@ if (isLoggedIn()) {
   
     <!-- Remind Passowrd -->
     <div id="formFooter">
-      <a class="underlineHover" href="#">Forgot Password?</a>
+      
     </div>
 
   </div>
