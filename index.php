@@ -11,10 +11,10 @@ if (!isLoggedIn()) {
 }
 $user_type = $_SESSION['user']['user_type'];
 
-$_COOKIE['username'] = $_SESSION['user']['username'];
-$_COOKIE['user_type'] = $_SESSION['user']['user_type'];
+//$_COOKIE['username'] = $_SESSION['user']['username'];
+//$_COOKIE['user_type'] = $_SESSION['user']['user_type'];
 
- setcookie($_COOKIE['username'],$_COOKIE['user_type'], time()+ 60,'/'); // expires after 60 seconds
+ //setcookie($_COOKIE['username'],$_COOKIE['user_type'], time()+ 60,'/'); // expires after 60 seconds
   /*  echo "<br>";
     echo "<br>";
     echo "<br>";
@@ -196,7 +196,7 @@ $query_profile_url = "SELECT profile_url FROM registered_users WHERE username = 
    
      <form method="POST" id="comment_form">
     <div class="form-group">
-     <textarea name="comment_content" id="comment_content" class="form-control" value = '' placeholder="World chat (max 50 words)" rows="5"></textarea>
+     <textarea name="comment_content" id="comment_content" class="form-control" value = '' placeholder="World chat (max 80 characters)" value = " " rows="5"></textarea>
     </div>
    
     <div class="form-group">
