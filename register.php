@@ -36,7 +36,7 @@ if (isLoggedIn()) {
       <input type="text" id="email" class="fadeIn third" name="email" placeholder="Email" value="<?php echo $email; ?>">
 
       <!--<input type="text" id="number" class="fadeIn third" name="number" placeholder="Number">-->
-      <input type="password" id="password" class="fadeIn third" name="password_1" placeholder="Password">
+      <input type="password" id="password" class="fadeIn third" required pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$" title="Password mush have Uppercase,Lowercase and numbers" name="password_1" placeholder="Password">
       
       <progress value="0" max="100" id = "strength" style="width: 230px;"></progress>
       <input type="password" id="password" class="fadeIn third" name="password_2" placeholder="Re-type password">
