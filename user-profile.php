@@ -144,12 +144,7 @@ $query_failed_attempts = "SELECT dob,city,occupation,secret_key FROM registered_
                 $secret_key = $row['secret_key'];
    							
    						}}
-              $options = [
-    'cost' =>12
-    ]; 
-    
-   						$rehash = password_needs_rehash($secret_key, PASSWORD_BCRYPT, $options);
-              echo $rehash;
+
 ?>
 <div class = "container col-sm-12">
   <div class = "col-sm-6">
@@ -184,12 +179,6 @@ $query_failed_attempts = "SELECT dob,city,occupation,secret_key FROM registered_
     		 <h4 id = 'profile-details'>  Occupation - $occupation</h4>
     	</div>
  	</div>"; } ?>
-
-  <div class='form-group col-sm-12'>
-      <div class = 'col-sm-6'>
-         <h4 id = 'profile-details'>Your secret key is <?php echo $secret_key; ?>n</h4>
-      </div>
-  </div>
  </div>
 
 
