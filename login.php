@@ -30,7 +30,7 @@ if (isLoggedIn()) {
 
     <!-- Login Form -->
      <script src='https://www.google.com/recaptcha/api.js' async defer></script>
-    <form method = "post" action="login.php" style = "margin-top: 5%;">
+    <form method = "post" action="login.php" autocomplete="off" style = "margin-top: 5%;">
       <?php echo display_error(); ?>
       <input type="text" id="username" class="fadeIn second" name="username" placeholder="Username">
       <input type="password" id="password" class="fadeIn third" name="password" placeholder="Password">
