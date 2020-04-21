@@ -208,7 +208,7 @@ $query_profile_url = "SELECT profile_url FROM registered_users WHERE username = 
       	 <?php echo display_error(); ?>
    	 <?php echo display_success(); ?>
    	   <div class="form-group">
-     <p>Messages will be deleted in 10 minutes</p>
+     
     </div>
    <span id="comment_message"></span>
    <br />
