@@ -127,18 +127,18 @@ if (isset($_GET['logout'])) {
 						{
 							while($row = $result->fetch_assoc()) 
 							{
-								$date_time_from_DB[] = $row['date_time'];
-								$username_from_DB[] = $row['username'];
-								$ip_address_from_DB[] = $row['ip_address'];			
+								$date_time_from_DB1[] = $row['date_time'];
+								$username_from_DB1[] = $row['username'];
+								$ip_address_from_DB1[] = $row['ip_address'];			
 							}
 						}
 
 				    	 for($i=0; $i<sizeof($username_from_DB); $i++)
 				    	{ ?>
  					   <tr>
-				        <td><?php echo $username_from_DB[$i]; ?></td>
-				        <td><?php echo $date_time_from_DB[$i]; ?></td>
-				        <td><?php echo $ip_address_from_DB[$i]; ?></td>
+				        <td><?php echo $username_from_DB1[$i]; ?></td>
+				        <td><?php echo $date_time_from_DB1[$i]; ?></td>
+				        <td><?php echo $ip_address_from_DB1[$i]; ?></td>
 				      </tr>
 				        <?php
 				     
