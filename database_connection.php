@@ -1,8 +1,10 @@
 <?php
+/*
 $servername = "localhost";
 $user1 = "root";
 $pass = "";
 $database = "application";
+*/
 
 /*
 $servername = "dyud5fa2qycz1o3v.cbetxkdyhwsb.us-east-1.rds.amazonaws.com";
