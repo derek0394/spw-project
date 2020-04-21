@@ -133,7 +133,7 @@ h4{
     </div>
 <?php
 
-$query_failed_attempts = "SELECT dob,city,occupation,secret_key FROM registered_users WHERE username = '$username'";
+$query_failed_attempts = "SELECT dob,city,occupation FROM registered_users WHERE username = '$username'";
 			//echo $query_failed_attempts;
 					$result1 = mysqli_query($conn, $query_failed_attempts);
 					if ($result1->num_rows > 0) {
