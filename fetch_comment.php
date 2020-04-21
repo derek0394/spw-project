@@ -22,7 +22,7 @@ foreach($result as $row)
  <div class="panel panel-default">
   <div class="panel-heading">By <b>'.$row["comment_sender_name"].'</b> on <i>'.$row["date"].'</i></div>
   <div class="panel-body">'.$row["comment"].'</div>
-  <div class="panel-footer" align="right"><button type="button" class="btn btn-default reply" id="'.$row["comment_id"].'">Reply</button></div>
+
  </div>
  ';
  $output .= get_reply_comment($connect, $row["comment_id"]);
@@ -56,7 +56,7 @@ function get_reply_comment($connect, $parent_id = 0, $marginleft = 0)
    <div class="panel panel-default" style="margin-left:'.$marginleft.'px">
     <div class="panel-heading">By <b>'.$row["comment_sender_name"].'</b> on <i>'.$row["date"].'</i></div>
     <div class="panel-body">'.$row["comment"].'</div>
-    <div class="panel-footer" align="right"><button type="button" class="btn btn-default reply" id="'.$row["comment_id"].'">Reply</button></div>
+
    </div>
    ';
    $output .= get_reply_comment($connect, $row["comment_id"], $marginleft);
