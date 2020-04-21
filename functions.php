@@ -149,7 +149,7 @@ function register()
 	$stmt->close();
 
 
-	if(isset($_POST['g-recaptcha-response'])){
+	/*if(isset($_POST['g-recaptcha-response'])){
       $captcha=$_POST['g-recaptcha-response'];
     }
       if(isset($_POST['g-recaptcha-response'])){
@@ -163,7 +163,7 @@ function register()
         // post request to server
         $url = 'https://www.google.com/recaptcha/api/siteverify?secret=' . urlencode($secretKey) .  '&response=' . urlencode($captcha);
         $response = file_get_contents($url);
-        $responseKeys = json_decode($response,true); 
+        $responseKeys = json_decode($response,true); */
 
 
 	if(!preg_match("/^[a-zA-Z0-9]+$/", $username))
@@ -210,8 +210,7 @@ function register()
 	// register user if there are no errors in the form
 	if (count($errors) == 0) 
 	{
-		
-    
+		 
 		//To generate hash for password
 		$options = [
 		'cost' => 11
@@ -221,24 +220,24 @@ function register()
 
 		if (isset($_POST['user_type'])) 
 		{
-			$query = "INSERT INTO registered_users (username, email, user_type, password, date_time, ip_address, user_os, user_browser, secret_key) 
-					  VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			$query = "INSERT INTO registered_users (username, email, user_type, password, date_time, ip_address, user_os, user_browser) 
+					  VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 					  $user_type = 'user';
 					  
 			$stmt = mysqli_prepare($conn, $query);
-			mysqli_stmt_bind_param($stmt, "sssssssss", $username, $email, $user_type, $password, $date_time, $ip_address, $user_os, $user_browser, $secret_key);
+			mysqli_stmt_bind_param($stmt, "ssssssss", $username, $email, $user_type, $password, $date_time, $ip_address, $user_os, $user_browser);
 			mysqli_stmt_execute($stmt);
 			$_SESSION['success']  = "New user successfully created!!";
 			header('location: home.php');
 		}
 		else
 		{
-			$query = "INSERT INTO registered_users (username, email, user_type, password, date_time, ip_address, user_os, user_browser, secret_key) 
-					  VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			$query = "INSERT INTO registered_users (username, email, user_type, password, date_time, ip_address, user_os, user_browser) 
+					  VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 					  $user_type = 'user';
 					  
 			$stmt = mysqli_prepare($conn, $query);
-			mysqli_stmt_bind_param($stmt, "sssssssss", $username, $email, $user_type, $password, $date_time, $ip_address, $user_os, $user_browser, $secret_key);
+			mysqli_stmt_bind_param($stmt, "ssssssss", $username, $email, $user_type, $password, $date_time, $ip_address, $user_os, $user_browser);
 			mysqli_stmt_execute($stmt);
 			// get id of the created user
 			$logged_in_user_id = mysqli_insert_id($conn);
@@ -337,7 +336,7 @@ function login(){
 	// grap form values
 	$username = strtolower(e($_POST['username'])); 
 	$password = e($_POST['password']);
-	if(isset($_POST['g-recaptcha-response'])){
+	/*if(isset($_POST['g-recaptcha-response'])){
       $captcha=$_POST['g-recaptcha-response'];
     }
       if(isset($_POST['g-recaptcha-response'])){
@@ -351,7 +350,7 @@ function login(){
         // post request to server
         $url = 'https://www.google.com/recaptcha/api/siteverify?secret=' . urlencode($secretKey) .  '&response=' . urlencode($captcha);
         $response = file_get_contents($url);
-        $responseKeys = json_decode($response,true); 
+        $responseKeys = json_decode($response,true); */
        
 	// make sure form is filled properly
 	if (empty($username)) {
