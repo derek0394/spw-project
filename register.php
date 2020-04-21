@@ -29,7 +29,7 @@ if (isLoggedIn()) {
 
     <!-- Login Form -->
      <script src='https://www.google.com/recaptcha/api.js' async defer></script>
-    <form method = "post", action="register.php" style = "margin-top: 5%;">
+    <form method = "post", action="register.php"  autocomplete="off" style = "margin-top: 5%;">
       <?php echo display_error(); ?>
 
       <input type="text" id="login" class="fadeIn second" name="username" placeholder="Username" value="<?php echo $username; ?>">
