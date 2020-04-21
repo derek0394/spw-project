@@ -738,7 +738,7 @@ function isAdmin()
 			$stmt = mysqli_prepare($conn, $query_insert);
 					mysqli_stmt_bind_param($stmt, "sssss", $username, $date_time, $ip_address, $user_os, 
 						$user_browser);
-					mysqli_stmt_execute($stmt);
+					mysqli_stmt_ewxecute($stmt);
 		}else {
 			
 				$query_insert = "INSERT INTO tried_to_access_admin_page (username, date_time, ip_address, user_os, user_browser) VALUES(?, ?, ?, ?, ?)";
