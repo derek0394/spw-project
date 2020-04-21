@@ -133,7 +133,7 @@ h4{
     </div>
 <?php
 
-$query_failed_attempts = "SELECT dob,city,occupation FROM registered_users WHERE username = '$username'";
+$query_failed_attempts = "SELECT dob,city,occupation,secret_key FROM registered_users WHERE username = '$username'";
 			//echo $query_failed_attempts;
 					$result1 = mysqli_query($conn, $query_failed_attempts);
 					if ($result1->num_rows > 0) {
@@ -141,9 +141,15 @@ $query_failed_attempts = "SELECT dob,city,occupation FROM registered_users WHERE
    							$dob = $row['dob'];
    							$city = $row['city'];
    							$occupation = $row['occupation'];
+                $secret_key = $row['secret_key'];
    							
-   						}} 
-   						
+   						}}
+              $options = [
+    'cost' =>12
+    ]; 
+    
+   						$rehash = password_needs_rehash($secret_key, PASSWORD_BCRYPT, $options);
+              echo $rehash;
 ?>
 <div class = "container col-sm-12">
   <div class = "col-sm-6">
@@ -178,11 +184,18 @@ $query_failed_attempts = "SELECT dob,city,occupation FROM registered_users WHERE
     		 <h4 id = 'profile-details'>  Occupation - $occupation</h4>
     	</div>
  	</div>"; } ?>
-</div>
+
+  <div class='form-group col-sm-12'>
+      <div class = 'col-sm-6'>
+         <h4 id = 'profile-details'>Your secret key is <?php echo $secret_key; ?>n</h4>
+      </div>
+  </div>
+ </div>
+
 
 
 <div class = "col-sm-6">
-   <form id="myform" method="post" action="user-profile.php" enctype="multipart/form-data" style = "text-align: center; margin-top: 2%;" >
+   <form id="myform" method="post" autocomplete="off" action="user-profile.php" enctype="multipart/form-data" style = "text-align: center; margin-top: 2%;" >
    	<h4 id ="profile-details">Update Profile Details</h4>
    	 <?php echo display_error(); ?>
    	 <?php echo display_success(); ?>
